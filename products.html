@@ -1163,6 +1163,7 @@
             <div class="category-filters">
                 <button class="category-btn active" onclick="filterGallery('all')">Semua Produk</button>
 				<button class="category-btn" onclick="filterGallery('madu')">Madu</button>
+				<button class="category-btn" onclick="filterGallery('minuman')">Minuman</button>
                 <button class="category-btn" onclick="filterGallery('beras')">Beras</button>
                 <button class="category-btn" onclick="filterGallery('telur')">Telur</button>
                 <button class="category-btn" onclick="filterGallery('ikan')">Ikan</button>
@@ -1367,6 +1368,30 @@
                     { url: 'images/madu/madu-envella-2.jpg', caption: 'Madu Multiflora' }
                 ]
             }, 
+
+			// Minuman
+            {
+                id: 'minuman-1',
+                category: 'minuman',
+                title: 'Minuman Lidah Buaya',
+                description: [
+					'Minuman olahan Lidah Buaya'
+					'Minumah segar alamai kaya manfaat'
+				],
+                price: 10000,
+                unit: 'botol',
+                image: 'images/minuman/minuman-lidah_buaya.jpg',
+                fallbackEmoji: '🥤',
+                stock: 'available',
+                stockCount: 50,
+				isPromo: false,
+                isNew: true,
+				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                hasVideo: false,
+				photos: [
+                    { url: 'images/minuman/minuman-lidah_buaya.jpg', caption: 'Minuman Lidah Buaya botol' }
+                ]
+            },
 			
 			// Beras
             {
@@ -2007,102 +2032,6 @@
                 ]
             },
             
-            // Minuman
-			/***
-            {
-                id: 'minuman-1',
-                category: 'minuman',
-                title: 'Jamu Kunyit Asam',
-                description: [
-					'Jamu tradisional kunyit asam untuk kesehatan dan stamina'
-				],
-                price: 8000,
-                unit: 'botol',
-                image: 'images/minuman/jamu-kunyit-asam.jpg',
-                fallbackEmoji: '🥤',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/minuman/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/minuman/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/minuman/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'minuman-2',
-                category: 'minuman',
-                title: 'Es Kelapa Muda',
-                description: [
-					'Kelapa muda segar langsung dari kebun untuk minuman yang menyegarkan'
-				],
-                price: 12000,
-                unit: 'buah',
-                image: 'images/minuman/kelapa-muda.jpg',
-                fallbackEmoji: '🥥',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/minuman/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/minuman/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/minuman/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'minuman-3',
-                category: 'minuman',
-                title: 'Wedang Jahe',
-                description: [
-					'Wedang jahe hangat dengan rempah-rempah alami untuk menghangatkan tubuh'
-				],
-                price: 5000,
-                unit: 'gelas',
-                image: 'images/minuman/wedang-jahe.jpg',
-                fallbackEmoji: '☕',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/minuman/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/minuman/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/minuman/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'minuman-4',
-                category: 'minuman',
-                title: 'Teh Daun Mint',
-                description: [
-					'Teh daun mint segar untuk relaksasi dan kesehatan'
-				],
-                price: 6000,
-                unit: 'gelas',
-                image: 'images/minuman/teh-mint.jpg',
-                fallbackEmoji: '🍵',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/minuman/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/minuman/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/minuman/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-			***/
-
             // Lain-lain
             {
                 id: 'lainlain-1',
