@@ -1491,8 +1491,32 @@
                     { url: 'images/gula/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
                     { url: 'images/gula/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
                 ]
-            },       
+            },  
 
+			// Pertanian
+            {
+                id: 'pertanian-1',
+                category: 'pertanian',
+                title: 'Pupuk Kohe',
+                description: [
+					'Pupuk organik ramah lingkungan untuk penyubur tanah alami',
+					'Fermentasi kohe kambing'
+				],
+                price: 25000,
+                unit: 'karung',
+                image: 'images/pertanian/pupuk-kohe.jpg',
+                fallbackEmoji: '🧴',
+                stock: 'available',
+                stockCount: 50,
+				isPromo: false,
+                isNew: true,
+				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                hasVideo: false,
+				photos: [
+                    { url: 'images/pertanian/pupuk-kohe.jpg', caption: 'Pupuk kohe kambing' }
+                ]
+            },
+            
             // Sayuran
             {
                 id: 'sayuran-1',
@@ -2125,101 +2149,7 @@
                     { url: 'images/lainlain/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
                 ]
             },
-
-            // Pertanian
-            {
-                id: 'pertanian-1',
-                category: 'pertanian',
-                title: 'Benih Padi Inpari 32',
-                description: [
-					'Benih Padi kualitas terbaik'
-				],
-                price: 80000,
-                unit: '5Kg',
-                image: 'images/pertanian/benih-padi-inpari32.jpg',
-                fallbackEmoji: '🌱',
-                stock: 'available',
-                stockCount: 20,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/pertanian/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/pertanian/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/pertanian/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'pertanian-2',
-                category: 'pertanian',
-                title: 'Pupuk NPK',
-                description: [
-					'Pupuk kimia dengan nutrisi lengkap untuk pertumbuhan tanaman optimal'
-				],
-                price: 12000,
-                unit: 'karung',
-                image: 'images/pertanian/pupuk-npk.jpg',
-                fallbackEmoji: '🌱',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/pertanian/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/pertanian/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/pertanian/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'pertanian-3',
-                category: 'pertanian',
-                title: 'Pupuk Kohe',
-                description: [
-					'Pestisida organik ramah lingkungan untuk pengendalian hama alami'
-				],
-                price: 25000,
-                unit: 'karung',
-                image: 'images/pertanian/pupuk-kohe.jpg',
-                fallbackEmoji: '🧴',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/pertanian/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/pertanian/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/pertanian/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'pertanian-4',
-                category: 'pertanian',
-                title: 'Media Tanam',
-                description: [
-					'Pestisida efektif untuk melindungi tanaman dari berbagai jenis hama'
-				],
-                price: 15000,
-                unit: 'karung',
-                image: 'images/pertanian/media-tanam.jpg',
-                fallbackEmoji: '🧴',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/pertanian/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/pertanian/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/pertanian/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            }  
-        ];
+		];
 
         // State management menggunakan memori JavaScript
         let cart = [];
