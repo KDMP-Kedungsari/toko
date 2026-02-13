@@ -1,2537 +1,1457 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koperasi Desa Merah Putih - Kalurahan Kedungsari</title>
-    
-    <!-- Google Analytics 4 (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JE5G9Y7YPR"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-JE5G9Y7YPR');
-
-        // Enhanced tracking functions for products page
-        function trackProductView(productName, category, price) {
-            gtag('event', 'view_item', {
-                currency: 'IDR',
-                value: price,
-                items: [{
-                    item_id: productName.toLowerCase().replace(/\s+/g, '-'),
-                    item_name: productName,
-                    item_category: category,
-                    price: price,
-                    quantity: 1
-                }]
-            });
-        }
-
-        function trackAddToCart(productName, category, price, quantity) {
-            gtag('event', 'add_to_cart', {
-                currency: 'IDR',
-                value: price * quantity,
-                items: [{
-                    item_id: productName.toLowerCase().replace(/\s+/g, '-'),
-                    item_name: productName,
-                    item_category: category,
-                    price: price,
-                    quantity: quantity
-                }]
-            });
-        }
-
-        function trackCategoryFilter(category) {
-            gtag('event', 'filter_products', {
-                event_category: 'Product Filter',
-                event_label: category,
-                value: 1
-            });
-        }
-
-        function trackCheckout(cartTotal, itemCount) {
-            gtag('event', 'begin_checkout', {
-                currency: 'IDR',
-                value: cartTotal,
-                event_category: 'E-commerce',
-                event_label: 'WhatsApp Checkout',
-                items_count: itemCount
-            });
-        }
-
-        function trackVideoClick(productName, videoUrl) {
-            gtag('event', 'video_click', {
-                event_category: 'Product Video',
-                event_label: productName,
-                video_url: videoUrl,
-                value: 1
-            });
-        }
-
-        function trackWhatsAppContact(adminName, adminPhone) {
-            gtag('event', 'contact_admin', {
-                event_category: 'WhatsApp Contact',
-                event_label: adminName,
-                admin_phone: adminPhone,
-                value: 1
-            });
-        }
-    </script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 1rem 0;
-        }
-
-        .nav-primary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .nav-secondary {
-            display: none;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-            margin-top: 1rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 3px solid #ff6b6b;
-        }
-
-        .logo-text h1 {
-            color: #ff6b6b;
-            font-size: 1.5rem;
-            margin-bottom: 2px;
-        }
-
-        .logo-text p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 8px 16px;
-            border-radius: 25px;
-        }
-
-        .nav-menu a:hover {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Cart Button */
-        .cart-button {
-            position: relative;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .cart-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .cart-count {
-            background: #ff6b6b;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            position: absolute;
-            top: -5px;
-            right: -5px;
-        }
-        
-        .mobile-cart-button {
-            width: 100%;
-            justify-content: center;
-            padding: 15px 0;
-            font-size: 1.1rem;
-        }
-
-        /* Hero Section */
-        .hero {
-            margin-top: 100px;
-            padding: 3rem 0;
-            text-align: center;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        /* Gallery Section */
-        .gallery-section {
-            padding: 3rem 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #333;
-        }
-
-        .category-filters {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .category-btn {
-            background: rgba(255, 107, 107, 0.1);
-            color: #ff6b6b;
-            border: 2px solid #ff6b6b;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .category-btn.active,
-        .category-btn:hover {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .gallery-item {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .gallery-item-image {
-            width: 100%;
-            height: 250px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .gallery-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover .gallery-item-image img {
-            transform: scale(1.05);
-        }
-		
-		/* Photo gallery button */
-        .photo-gallery-btn {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #ff6b6b;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            z-index: 10;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .photo-gallery-btn:hover {
-            background: #ff6b6b;
-            color: white;
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .badges-container {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            z-index: 10;
-        }
-
-        .badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            backdrop-filter: blur(10px);
-            text-align: center;
-            min-width: 70px;
-        }
-
-        .stock-available {
-            background: rgba(40, 167, 69, 0.9);
-            color: white;
-        }
-
-        .stock-low {
-            background: rgba(255, 193, 7, 0.9);
-            color: #333;
-        }
-
-        .stock-out {
-            background: rgba(220, 53, 69, 0.9);
-            color: white;
-        }
-
-        .promo-badge {
-            background: rgba(255, 20, 147, 0.9);
-            color: white;
-            animation: pulse 2s infinite;
-        }
-
-        .new-badge {
-            background: rgba(0, 123, 255, 0.9);
-            color: white;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
-            to { box-shadow: 0 0 20px rgba(0, 123, 255, 0.8); }
-        }
-
-        .gallery-item-content {
-            padding: 1.5rem;
-        }
-
-        .item-category {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .item-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        /* New structured description styles */
-        .item-description {
-            margin-bottom: 1rem;
-        }
-
-        .description-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .description-list li {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-            line-height: 1.4;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .description-list li::before {
-            content: "✅";
-            position: absolute;
-            left: 0;
-            color: #28a745;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        /* Video section styles */
-        .item-video {
-            margin-bottom: 1rem;
-        }
-
-        .video-link {
-            display: inline-block;
-            background: #ff4458;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin-bottom: 0.5rem;
-        }
-
-        .video-link:hover {
-            background: #e33d4a;
-            transform: translateY(-1px);
-        }
-
-        .item-price {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-bottom: 1rem;
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 1rem;
-        }
-
-        .quantity-label {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .quantity-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quantity-btn:hover {
-            background: #e55656;
-            transform: scale(1.1);
-        }
-
-        .quantity-input {
-            width: 60px;
-            text-align: center;
-            padding: 8px;
-            border: 2px solid #ff6b6b;
-            border-radius: 8px;
-            font-weight: bold;
-            background: white;
-            color: #333;
-        }
-
-        .add-to-cart-btn {
-            width: 100%;
-            background: #25d366;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .add-to-cart-btn:hover {
-            background: #128c7e;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-        }
-
-        .add-to-cart-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 4rem 0;
-            background: white;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            border-color: #ff6b6b;
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
-        }
-
-        .feature-card h3 {
-            color: #333;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .cart-modal-content {
-            background: white;
-            margin: 2% auto;
-            padding: 2rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .admin-selection {
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-        }
-
-        .admin-selection h3 {
-            color: #333;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-        }
-
-        .admin-card {
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .admin-card:hover {
-            border-color: #ff6b6b;
-            transform: translateY(-2px);
-        }
-
-        .admin-card.selected {
-            border-color: #25d366;
-            background: #e8f5e8;
-        }
-
-        .admin-name {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .admin-phone {
-            font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .admin-status {
-            font-size: 0.8rem;
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            background: #f8f9fa;
-            margin: 10px 0;
-            border-radius: 10px;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .cart-item-details {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .cart-item-quantity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
-        }
-
-        .cart-quantity-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .cart-quantity-input {
-            width: 50px;
-            text-align: center;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .cart-item-price {
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-left: 15px;
-        }
-
-        .cart-item-remove {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .cart-total {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .cart-total h3 {
-            margin-bottom: 10px;
-        }
-
-        .total-amount {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .cart-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .cart-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .cart-btn-primary {
-            background: #25d366;
-            color: white;
-        }
-
-        .cart-btn-primary:hover {
-            background: #128c7e;
-        }
-
-        .cart-btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .cart-btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        .cart-btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .cart-btn-danger:hover {
-            background: #c0392b;
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .empty-cart i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        /* Success notification */
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 2001;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            background: #dc3545;
-        }
-
-		        /* Photo Gallery Modal */
-        .gallery-modal {
-            display: none;
-            position: fixed;
-            z-index: 3000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(5px);
-        }
-
-        .gallery-modal-content {
-            background: white;
-            margin: 3% auto;
-            padding: 2rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 900px;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .gallery-modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ff6b6b;
-        }
-
-        .gallery-modal-header h2 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .gallery-modal-header p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .photo-gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .photo-gallery-item {
-            border-radius: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid #e9ecef;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .photo-gallery-item:hover {
-            transform: translateY(-5px);
-            border-color: #ff6b6b;
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-        }
-
-        .photo-gallery-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .photo-gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .photo-gallery-item-info {
-            padding: 15px;
-            background: #f8f9fa;
-        }
-
-        .photo-gallery-item-info h4 {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .photo-gallery-item-info p {
-            font-size: 0.85rem;
-            color: #666;
-            margin: 0;
-            line-height: 1.4;
-        }
-
-        .gallery-empty {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .gallery-empty-icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            opacity: 0.3;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 5rem 0;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            text-align: center;
-        }
-
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .contact-item {
-            padding: 2rem;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .contact-item h3 {
-            margin-bottom: 1rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-            
-            .nav-secondary {
-                display: block;
-            }
-
-            .nav-primary {
-                padding-bottom: 1rem;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cart-modal-content {
-                width: 95%;
-                margin: 10% auto;
-            }
-
-            .cart-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .cart-actions {
-                flex-direction: column;
-            }
-
-            .category-filters {
-                justify-content: flex-start;
-                overflow-x: auto;
-                padding: 0 10px;
-            }
-
-            .quantity-selector {
-                justify-content: space-between;
-            }
-
-            .admin-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .badges-container {
-                right: 10px;
-                top: 10px;
-            }
-			
-			.photo-gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-                gap: 15px;
-            }
-
-            .photo-gallery-item img {
-                height: 150px;
-            }
-
-            .gallery-modal-content {
-                width: 95%;
-                margin: 5% auto;
-                padding: 1.5rem;
-            }
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rumah Data Kependudukan – Kalurahan Kedungsari</title>
+  <meta name="description" content="Rumah Data Kependudukan Kalurahan Kedungsari – Pusat informasi data kependudukan, demografi, dan layanan administrasi warga secara transparan dan terbuka."/>
+  <meta name="keywords" content="Rumah Data, Kependudukan, Kalurahan Kedungsari, Data Demografi, Administrasi Desa, Yogyakarta, Open Data"/>
+  <meta name="author" content="Kalurahan Kedungsari"/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="geo.region" content="ID-YO"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Rumah Data Kependudukan – Kalurahan Kedungsari"/>
+  <meta property="og:description" content="Pusat informasi data kependudukan Kalurahan Kedungsari secara transparan dan terbuka."/>
+  <meta property="og:locale" content="id_ID"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://kalurahan-kedungsari.github.io/"/>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"GovernmentOrganization","name":"Rumah Data Kependudukan Kalurahan Kedungsari","url":"https://kalurahan-kedungsari.github.io/","address":{"@type":"PostalAddress","addressLocality":"Kedungsari","addressRegion":"Yogyakarta","addressCountry":"ID"}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --cream:#F5EFE0;--parchment:#EDE3CC;--brown:#3D2B1F;--brown-mid:#6B4C35;
+  --brown-lite:#A07850;--green:#2D5016;--green-mid:#4A7C28;--green-lite:#7FB347;
+  --gold:#C8922A;--gold-lite:#E8B84B;--red:#8B2020;--teal:#1A5F6A;
+  --white:#FDFAF4;--shadow:rgba(61,43,31,.18);
+  --r-sm:6px;--r-md:12px;--r-lg:20px;--tr:all .28s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--brown);overflow-x:hidden;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 15%,rgba(200,146,42,.08) 0%,transparent 55%),radial-gradient(circle at 85% 80%,rgba(45,80,22,.07) 0%,transparent 55%),url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C8922A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0}
+
+/* HEADER */
+header{position:relative;z-index:10;background:linear-gradient(135deg,var(--green) 0%,#1e3a0e 60%,var(--brown) 100%);overflow:hidden}
+header::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z' fill='rgba(255,255,255,0.03)'/%3E%3C/svg%3E") repeat;pointer-events:none}
+#adminTrigger{position:fixed;top:0;right:0;width:80px;height:80px;z-index:500;background:transparent;border:none;outline:none;cursor:default;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
+.header-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:32px 24px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.header-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(200,146,42,.25);border:1px solid rgba(200,146,42,.5);border-radius:100px;padding:6px 16px;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold-lite);letter-spacing:.1em;text-transform:uppercase;animation:fadeDown .6s ease both}
+.header-logo{font-size:3.2rem;animation:fadeDown .5s .1s ease both}
+.header-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(1.9rem,5vw,3.4rem);color:var(--white);line-height:1.12;animation:fadeDown .5s .2s ease both}
+.header-title span{color:var(--gold-lite);display:block}
+.header-subtitle{font-size:.95rem;color:rgba(253,250,244,.72);max-width:520px;line-height:1.65;animation:fadeDown .5s .3s ease both}
+.header-stats-bar{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;margin-top:8px;animation:fadeDown .5s .4s ease both}
+.stat-chip{background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:var(--r-md);padding:10px 18px;text-align:center}
+.stat-chip .num{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--gold-lite);display:block}
+.stat-chip .label{font-size:.72rem;color:rgba(253,250,244,.7);text-transform:uppercase;letter-spacing:.08em}
+
+/* HERO IMAGE */
+.hero-image{width:100%;max-width:1200px;margin:0 auto;position:relative;overflow:hidden;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.hero-image img{width:100%;height:auto;display:block;object-fit:cover;max-height:400px}
+
+/* TICKER */
+.ticker-bar{position:relative;z-index:10;background:var(--gold);padding:7px 0;overflow:hidden}
+.ticker-content{display:flex;gap:64px;white-space:nowrap;animation:tickerScroll 28s linear infinite;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--brown);font-weight:500;padding:0 24px}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:40px 20px 60px}
+.section-header{display:flex;align-items:baseline;gap:14px;margin-bottom:28px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.25rem,3vw,1.6rem);font-weight:700;color:var(--brown)}
+.section-line{flex:1;height:2px;background:linear-gradient(to right,var(--brown-lite),transparent);border-radius:2px}
+.section-tag{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--brown-lite);text-transform:uppercase;letter-spacing:.12em}
+
+/* DASHBOARD */
+.dashboard-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:64px}
+.dash-card{background:var(--white);border-radius:var(--r-md);padding:22px 20px;border:1px solid rgba(61,43,31,.08);box-shadow:0 2px 8px var(--shadow);transition:var(--tr);position:relative;overflow:hidden}
+.dash-card::after{content:attr(data-emoji);position:absolute;right:12px;bottom:8px;font-size:2.8rem;opacity:.12;pointer-events:none}
+.dash-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--shadow)}
+.dash-card .dc-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--brown-lite);margin-bottom:6px}
+.dash-card .dc-value{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--brown);line-height:1}
+.dash-card .dc-sub{font-size:.74rem;color:var(--brown-lite);margin-top:4px}
+.dc-green{border-left:3px solid var(--green-mid)}.dc-gold{border-left:3px solid var(--gold)}.dc-red{border-left:3px solid var(--red)}.dc-teal{border-left:3px solid var(--teal)}
+
+/* PHOTO WALL - MODEL PRODUCT.HTML */
+.photo-wall{columns:4 240px;gap:16px;margin-bottom:64px}
+.photo-frame{break-inside:avoid;margin-bottom:16px;background:var(--white);border-radius:var(--r-md);overflow:hidden;box-shadow:0 2px 12px var(--shadow);cursor:pointer;transition:var(--tr);position:relative}
+.photo-frame:hover{transform:translateY(-4px) scale(1.015);box-shadow:0 12px 32px var(--shadow),0 0 0 1px rgba(200,146,42,.25)}
+.photo-frame:hover .frame-overlay{opacity:1}
+.photo-frame img{width:100%;height:auto;display:block;object-fit:cover}
+
+/* IMAGE PLACEHOLDER dengan emoji fallback */
+.product-image-placeholder{
+  width:100%;
+  aspect-ratio:4/3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--parchment),var(--cream));
+  border:2px dashed rgba(160,120,80,.35);
+  font-size:4rem;
+  color:#adb5bd;
+}
+
+/* GALERI BUTTON - seperti product.html */
+.photo-gallery-btn{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:rgba(200,146,42,.95);
+  backdrop-filter:blur(8px);
+  color:var(--white);
+  border:none;
+  padding:8px 14px;
+  border-radius:100px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.75rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:var(--tr);
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.photo-gallery-btn:hover{
+  background:var(--gold-lite);
+  transform:scale(1.05);
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+
+/* VIDEO BUTTON IN CARD */
+.card-video-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:rgba(26,95,106,.95);
+  backdrop-filter:blur(8px);
+  color:var(--white);
+  border:none;
+  padding:8px 14px;
+  border-radius:100px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.75rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:var(--tr);
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.card-video-btn:hover{
+  background:var(--teal);
+  transform:scale(1.05);
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.card-video-btn:active{transform:scale(0.98)}
+.card-video-btn.hidden{display:none}
+
+.emoji-frame{aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,var(--parchment),var(--cream));border:2px dashed rgba(160,120,80,.35)}
+.emoji-frame .big-emoji{font-size:2.8rem;line-height:1}
+.emoji-frame .frame-caption{font-size:.78rem;color:var(--brown-lite);text-align:center;padding:0 12px;font-style:italic}
+.frame-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(61,43,31,.82),transparent 55%);opacity:0;transition:var(--tr);display:flex;align-items:flex-end;padding:14px}
+.frame-label{padding:10px 12px 12px;border-top:1px solid rgba(61,43,31,.06)}
+.frame-label strong{display:block;font-size:.82rem;font-weight:600;color:var(--brown);margin-bottom:2px}
+.frame-label span{font-size:.72rem;color:var(--brown-lite)}
+.frame-tall .emoji-frame{aspect-ratio:3/4}
+
+/* REPORTS - MODEL PRODUCT.HTML */
+.reports-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:64px}
+.report-card{background:var(--white);border-radius:var(--r-md);border:1px solid rgba(61,43,31,.09);padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 2px 8px var(--shadow);transition:var(--tr);position:relative;overflow:hidden}
+.report-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--green),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.report-card:hover::before{transform:scaleX(1)}
+.report-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px var(--shadow)}
+.report-card .img-container{position:relative}
+.report-card img{width:100%;height:auto;border-radius:var(--r-sm);margin-bottom:8px;object-fit:cover;max-height:180px}
+.report-icon{font-size:1.9rem}
+.report-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--brown);font-weight:700}
+.report-card p{font-size:.82rem;color:var(--brown-lite);line-height:1.6;flex:1}
+.report-meta{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(61,43,31,.07)}
+.report-date{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--brown-lite)}
+.report-btn{font-size:.74rem;font-weight:600;color:var(--white);background:var(--green);border:none;padding:5px 12px;border-radius:100px;cursor:pointer;transition:var(--tr)}
+.report-btn:hover{background:var(--green-mid)}
+
+/* KEGIATAN - MODEL PRODUCT.HTML */
+.kegiatan-strip{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;margin-bottom:64px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.kegiatan-strip::-webkit-scrollbar{height:5px}.kegiatan-strip::-webkit-scrollbar-track{background:rgba(61,43,31,.07);border-radius:4px}.kegiatan-strip::-webkit-scrollbar-thumb{background:var(--brown-lite);border-radius:4px}
+.kegiatan-card{flex:0 0 260px;scroll-snap-align:start;background:var(--white);border-radius:var(--r-md);overflow:hidden;box-shadow:0 2px 10px var(--shadow);transition:var(--tr);position:relative}
+.kegiatan-card:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 10px 28px var(--shadow)}
+.kegiatan-card .img-container{position:relative}
+.kegiatan-card img{width:100%;height:160px;object-fit:cover;display:block}
+.kegiatan-img{height:160px;background:linear-gradient(135deg,var(--parchment),var(--cream));display:flex;align-items:center;justify-content:center;font-size:3rem;border-bottom:2px dashed rgba(160,120,80,.3)}
+.kegiatan-info{padding:14px}
+.kegiatan-info h4{font-weight:600;font-size:.88rem;color:var(--brown);margin-bottom:4px}
+.kegiatan-info span{font-size:.74rem;color:var(--brown-lite)}
+
+/* GALLERY MODAL - seperti product.html */
+.gallery-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(20,12,5,.95);
+  backdrop-filter:blur(10px);
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.gallery-modal.active{display:flex}
+.gallery-modal-content{
+  max-width:1000px;
+  max-height:90vh;
+  width:100%;
+  background:var(--white);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  position:relative;
+  animation:lbIn .25s ease;
+}
+.gallery-modal-header{
+  background:var(--green);
+  color:var(--white);
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.gallery-modal-header h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;
+}
+.gallery-close-btn{
+  background:rgba(255,255,255,.2);
+  border:none;
+  color:var(--white);
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:1.2rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:var(--tr);
+}
+.gallery-close-btn:hover{
+  background:rgba(255,255,255,.35);
+  transform:rotate(90deg);
+}
+.gallery-modal-body{
+  padding:20px;
+  max-height:calc(90vh - 80px);
+  overflow-y:auto;
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:16px;
+}
+.gallery-item{
+  position:relative;
+  cursor:pointer;
+  border-radius:var(--r-sm);
+  overflow:hidden;
+  transition:var(--tr);
+}
+.gallery-item:hover{
+  transform:scale(1.05);
+  box-shadow:0 8px 24px var(--shadow);
+}
+.gallery-item img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  display:block;
+}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;z-index:99998;background:rgba(20,12,5,.9);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:24px}
+.lightbox.active{display:flex}
+.lightbox-inner{max-width:900px;max-height:90vh;width:100%;position:relative;animation:lbIn .25s ease}
+@keyframes lbIn{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.lightbox-content{width:100%;background:var(--white);border-radius:var(--r-md);overflow:hidden}
+.lightbox-content img{width:100%;height:auto;display:block;max-height:70vh;object-fit:contain}
+.lightbox-emoji-big{width:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:5rem;gap:16px;background:rgba(245,239,224,.05);border-radius:var(--r-md)}
+.lightbox-emoji-big p{font-size:1rem;color:rgba(253,250,244,.8);text-align:center;max-width:360px}
+.lightbox-caption{padding:20px;background:var(--white);color:var(--brown)}
+.lightbox-caption strong{display:block;font-size:1.1rem;margin-bottom:8px}
+.lightbox-close{position:absolute;top:-14px;right:-14px;width:40px;height:40px;background:var(--gold);color:var(--brown);border:none;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;transition:var(--tr);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.lightbox-close:hover{background:var(--gold-lite);transform:rotate(90deg)}
+
+/* FOOTER */
+footer{position:relative;z-index:10;background:linear-gradient(160deg,var(--brown) 0%,#1c110a 100%);color:rgba(253,250,244,.75);overflow:hidden}
+footer::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z' fill='rgba(200,146,42,0.05)'/%3E%3C/svg%3E") repeat;pointer-events:none}
+.footer-inner{position:relative;max-width:1200px;margin:0 auto;padding:48px 24px 0}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand h2{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--white);margin-bottom:10px}
+.footer-brand p{font-size:.82rem;line-height:1.7;color:rgba(253,250,244,.6);max-width:300px}
+.footer-col h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold-lite);margin-bottom:14px;font-weight:600}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-col ul li a{color:rgba(253,250,244,.6);text-decoration:none;font-size:.82rem;transition:var(--tr);display:inline-flex;align-items:center;gap:6px}
+.footer-col ul li a:hover{color:var(--gold-lite);transform:translateX(3px)}
+.quick-access{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:28px;margin-bottom:28px}
+.qa-title{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold-lite);margin-bottom:18px;font-weight:600}
+.qa-buttons{display:flex;flex-wrap:wrap;gap:10px}
+.qa-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:100px;border:none;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;text-decoration:none;transition:var(--tr)}
+.qa-btn.primary{background:var(--gold);color:var(--brown)}.qa-btn.primary:hover{background:var(--gold-lite);transform:translateY(-2px)}
+.qa-btn.secondary{background:rgba(255,255,255,.08);color:var(--white);border:1px solid rgba(255,255,255,.14)}.qa-btn.secondary:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.qa-btn.green{background:rgba(45,80,22,.7);color:var(--green-lite);border:1px solid rgba(127,179,71,.25)}.qa-btn.green:hover{background:var(--green-mid);color:var(--white);transform:translateY(-2px)}
+.qa-btn.teal{background:rgba(26,95,106,.6);color:#7dd3dc;border:1px solid rgba(26,95,106,.8)}.qa-btn.teal:hover{background:var(--teal);color:var(--white);transform:translateY(-2px)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:18px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-bottom p{font-size:.75rem;color:rgba(253,250,244,.4)}
+.footer-bottom p span{color:var(--gold-lite)}
+.footer-badge{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:.68rem;color:rgba(253,250,244,.35);border:1px solid rgba(255,255,255,.1);padding:4px 10px;border-radius:100px}
+
+/* BACK TO TOP */
+#backToTop{position:fixed;bottom:28px;right:24px;width:46px;height:46px;background:var(--green);color:var(--white);border:none;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:var(--tr);z-index:999}
+#backToTop.show{opacity:1;transform:translateY(0)}
+#backToTop:hover{background:var(--green-mid)}
+
+@keyframes fadeDown{from{transform:translateY(-14px);opacity:0}to{transform:translateY(0);opacity:1}}
+.fade-in{animation:fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════ ADMIN PANEL ═══════════ */
+#pinModal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(20,12,5,.93);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:16px}
+#pinModal.active{display:flex}
+.pin-box{background:var(--white);border-radius:var(--r-lg);padding:32px 28px;width:min(340px,100%);text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.5);animation:lbIn .25s ease}
+.pin-box h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--brown);margin-bottom:6px}
+.pin-box p{font-size:.82rem;color:var(--brown-lite);margin-bottom:22px}
+.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:22px}
+.pin-dot{width:14px;height:14px;border-radius:50%;background:rgba(61,43,31,.15);transition:var(--tr)}
+.pin-dot.filled{background:var(--green)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.pin-key{background:var(--parchment);border:1px solid rgba(61,43,31,.12);border-radius:var(--r-md);padding:15px;font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--brown);cursor:pointer;transition:var(--tr);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.pin-key:hover,.pin-key:active{background:var(--gold);color:var(--white)}
+.pin-key.del{font-size:1rem;font-family:'DM Sans',sans-serif}
+.pin-error{font-size:.8rem;color:#c0392b;min-height:20px;margin-bottom:4px}
+.pin-close-btn{background:none;border:none;font-size:.8rem;color:var(--brown-lite);cursor:pointer;text-decoration:underline}
+
+/* Admin Panel Drawer */
+#adminPanel{position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;height:100dvh;background:#271a10;z-index:88888;transform:translateX(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.5);display:flex;flex-direction:column;overflow:hidden}
+#adminPanel.open{transform:translateX(0)}
+.ap-header{background:linear-gradient(135deg,var(--green),#1a3309);padding:13px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ap-header h2{font-family:'Playfair Display',serif;color:var(--white);font-size:.92rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ap-hbtns{display:flex;gap:8px;flex-shrink:0}
+.ap-close{background:rgba(255,255,255,.12);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:var(--tr)}
+.ap-close:hover{background:rgba(255,255,255,.28)}
+.ap-logout-btn{background:rgba(139,32,32,.45);border:1px solid rgba(139,32,32,.6);color:#ffb3b3;font-size:.72rem;padding:6px 12px;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;transition:var(--tr);white-space:nowrap}
+.ap-logout-btn:hover{background:var(--red);color:#fff}
+.ap-tabs{display:flex;background:rgba(0,0,0,.3);flex-shrink:0;overflow-x:auto}
+.ap-tabs::-webkit-scrollbar{display:none}
+.ap-tab{flex:1;min-width:66px;padding:10px 4px;background:none;border:none;color:rgba(253,250,244,.45);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;touch-action:manipulation;transition:var(--tr)}
+.ap-tab.active{color:var(--gold-lite);border-bottom-color:var(--gold-lite);background:rgba(200,146,42,.1)}
+
+.ap-body{flex:1 1 0;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.ap-body::-webkit-scrollbar{width:4px}
+.ap-body::-webkit-scrollbar-track{background:rgba(0,0,0,.15)}
+.ap-body::-webkit-scrollbar-thumb{background:rgba(200,146,42,.5);border-radius:2px}
+.ap-panel{display:none;padding:20px 16px}
+.ap-panel.active{display:block}
+.ap-form{background:rgba(255,255,255,.04);border-radius:var(--r-md);padding:18px;margin-bottom:16px;display:none}
+.ap-form.active{display:block}
+.ap-form-title{font-size:.95rem;font-weight:600;color:var(--gold-lite);margin-bottom:14px}
+.ap-field{margin-bottom:14px}
+.ap-field label{display:block;font-size:.75rem;color:rgba(253,250,244,.7);margin-bottom:5px;text-transform:uppercase;letter-spacing:.08em}
+.ap-field input,.ap-field textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--white)}
+.ap-field input::placeholder,.ap-field textarea::placeholder{color:rgba(253,250,244,.3)}
+.ap-field textarea{resize:vertical;min-height:80px}
+.ap-btns{display:flex;gap:10px;margin-top:16px}
+.ap-btn{flex:1;padding:10px 16px;border:none;border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:var(--tr);touch-action:manipulation}
+.ap-btn.save{background:var(--green);color:var(--white)}
+.ap-btn.save:hover{background:var(--green-mid)}
+.ap-btn.cancel{background:rgba(255,255,255,.08);color:rgba(253,250,244,.7)}
+.ap-btn.cancel:hover{background:rgba(255,255,255,.15)}
+.ap-add-btn{width:100%;padding:12px;background:var(--gold);color:var(--brown);border:none;border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:var(--tr);margin-bottom:20px}
+.ap-add-btn:hover{background:var(--gold-lite)}
+.ap-list-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.ap-list-body{flex:1;min-width:0}
+.ap-list-body strong{display:block;font-size:.85rem;color:var(--white);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ap-list-body span{font-size:.72rem;color:rgba(253,250,244,.5);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ap-list-actions{display:flex;gap:6px;flex-shrink:0}
+.ap-edit,.ap-del{padding:5px 10px;border:none;border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:600;cursor:pointer;transition:var(--tr)}
+.ap-edit{background:var(--teal);color:var(--white)}
+.ap-edit:hover{background:#2a7f8c}
+.ap-del{background:var(--red);color:var(--white)}
+.ap-del:hover{background:#a52828}
+
+#adminBadge{position:fixed;bottom:82px;right:24px;background:var(--green);color:var(--white);padding:8px 16px;border-radius:100px;font-family:'DM Mono',monospace;font-size:.7rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:998;opacity:0;transform:translateY(10px);transition:var(--tr);pointer-events:none}
+#adminBadge.visible{opacity:1;transform:translateY(0)}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--brown);color:var(--white);padding:12px 24px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:.82rem;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:9998;opacity:0;transition:var(--tr)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:768px){
+  .header-stats-bar{gap:12px}
+  .stat-chip{padding:8px 14px}
+  .stat-chip .num{font-size:1.3rem}
+  .dashboard-row{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .photo-wall{columns:2 200px}
+  .reports-grid{grid-template-columns:1fr}
+  .kegiatan-card{flex:0 0 220px}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{justify-content:center;text-align:center}
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+</style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <nav class="nav-primary">
-                <div class="logo">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff6b6b'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='40' font-weight='bold'%3EK%3C/text%3E%3C/svg%3E" alt="Logo">
-                    <div class="logo-text">
-                        <h1>KOPERASI DESA MERAH PUTIH</h1>
-                        <p>Kalurahan Kedungsari</p>
-                    </div>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="#beranda">Beranda</a></li>
-                    <li><a href="#galeri">Produk</a></li>
-                    <li><a href="#tentang">Tentang</a></li>
-                    <li><a href="#kontak">Kontak</a></li>
-                    <li class="cart-desktop">
-                        <button class="cart-button" onclick="openCart()">
-                            🛒 Keranjang
-                            <div class="cart-count" id="cartCountDesktop">0</div>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-            <nav class="nav-secondary">
-                <button class="cart-button mobile-cart-button" onclick="openCart()">
-                    🛒 Keranjang
-                    <div class="cart-count" id="cartCountMobile">0</div>
-                </button>
-            </nav>
-        </div>
-    </header>
 
-    <section class="hero" id="beranda">
-        <div class="container">
-            <h1>Selamat Datang di Koperasi Desa Merah Putih</h1>
-            <p>Produk berkualitas langsung dari masyarakat Kalurahan Kedungsari</p>
-        </div>
-    </section>
+<button id="adminTrigger" aria-label="Admin Trigger"></button>
 
-    <section class="gallery-section" id="galeri">
-        <div class="container">
-            <h2 class="section-title">Galeri Produk Kami</h2>
+<header>
+  <div class="header-inner">
+    <div class="header-badge">🏛️ Open Data Portal</div>
+    <div class="header-logo">📊</div>
+    <h1 class="header-title">Rumah Data Kependudukan<span>Kalurahan Kedungsari</span></h1>
+    <p class="header-subtitle">Portal data kependudukan dan informasi desa yang transparan, terbuka, dan mudah diakses untuk meningkatkan partisipasi warga.</p>
+    <div class="header-stats-bar">
+      <div class="stat-chip"><span class="num" id="hPenduduk">—</span><span class="label">Penduduk</span></div>
+      <div class="stat-chip"><span class="num" id="hKK">—</span><span class="label">KK</span></div>
+      <div class="stat-chip"><span class="num" id="hDusun">—</span><span class="label">Dusun</span></div>
+      <div class="stat-chip"><span class="num" id="hTahun">—</span><span class="label">Tahun Data</span></div>
+    </div>
+  </div>
+</header>
 
-            <div class="category-filters">
-                <button class="category-btn active" onclick="filterGallery('all')">Semua Produk</button>
-				<button class="category-btn" onclick="filterGallery('madu')">Madu</button>
-				<button class="category-btn" onclick="filterGallery('minuman')">Minuman</button>
-                <button class="category-btn" onclick="filterGallery('beras')">Beras</button>
-				<button class="category-btn" onclick="filterGallery('pertanian')">Pertanian</button>
-                <button class="category-btn" onclick="filterGallery('telur')">Telur</button>
-                <button class="category-btn" onclick="filterGallery('ikan')">Ikan</button>
-                <button class="category-btn" onclick="filterGallery('gula')">Gula</button>
-                <button class="category-btn" onclick="filterGallery('minyak goreng')">Minyak Goreng</button>
-                <button class="category-btn" onclick="filterGallery('sayuran')">Sayuran</button>
-                <button class="category-btn" onclick="filterGallery('daging')">Daging</button>
-                <button class="category-btn" onclick="filterGallery('olahan')">Olahan</button>
-                <button class="category-btn" onclick="filterGallery('lainlain')">Lain-lain</button>
-            </div>
+<div class="hero-image" id="heroImage"></div>
 
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- Gallery items will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
+<div class="ticker-bar">
+  <div class="ticker-content" id="tickerContent"></div>
+</div>
 
-    <section class="features" id="tentang">
-        <div class="container">
-            <h2 class="section-title">Mengapa Memilih Kami?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏪</div>
-                    <h3>Produk Lokal Berkualitas</h3>
-                    <p>Kami menyediakan produk-produk unggulan dari masyarakat lokal dengan standar kualitas terbaik</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Harga Terjangkau</h3>
-                    <p>Harga yang bersahabat untuk semua kalangan masyarakat dengan kualitas yang tidak diragukan</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🚚</div>
-                    <h3>Pengiriman Mudah</h3>
-                    <p>Layanan antar yang cepat dan terpercaya untuk kemudahan berbelanja Anda</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<main>
+  <section>
+    <div class="section-header"><div class="section-tag">Statistik</div><h2 class="section-title">Dashboard Data Kependudukan</h2><div class="section-line"></div></div>
+    <div class="dashboard-row" id="dashboardRow"></div>
+  </section>
 
-    <section class="contact" id="kontak">
-        <div class="container">
-            <h2 class="section-title">Kontak Kami</h2>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <h3>📍 Alamat</h3>
-                    <p>Jl. Raya Jogja - Wates KM 23</p>
-                    <p>Kalurahan Kedungsari, Kab. Kulon Progo</p>
-                </div>
-                <div class="contact-item">
-                    <h3>📞 Telepon</h3>
-                    <p>+62 812-9683 690</p>
-                    <p>+62 888-0617-4649</p>
-                </div>
-                <div class="contact-item">
-                    <h3>✉️ Email</h3>
-                    <p>kedungsarikdmp@gmail.com</p>
-                    <p>ekokus.djogja@gmail.com</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section id="foto">
+    <div class="section-header"><div class="section-tag">Galeri</div><h2 class="section-title">📷 Dinding Foto Desa</h2><div class="section-line"></div></div>
+    <div class="photo-wall" id="photoWall"></div>
+  </section>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Koperasi Desa Merah Putih. Hak Cipta Dilindungi Undang-Undang.</p>
-        </div>
-    </footer>
+  <section id="laporan">
+    <div class="section-header"><div class="section-tag">Dokumen</div><h2 class="section-title">📋 Laporan & Foto Publikasi</h2><div class="section-line"></div></div>
+    <div class="reports-grid" id="reportsGrid"></div>
+  </section>
 
-    <!-- Cart Modal -->
-    <div id="cartModal" class="cart-modal">
-        <div class="cart-modal-content">
-            <span class="close" onclick="closeCart()">&times;</span>
-            <h2>Keranjang Belanja 🛒</h2>
-            
-            <div class="admin-selection">
-                <h3>Pilih Admin untuk Pemesanan</h3>
-                <div class="admin-grid" id="adminGrid">
-                    <!-- Admin cards will be populated by JavaScript -->
-                </div>
-            </div>
-            
-            <div id="cartItemsContainer"></div>
-            <div id="emptyCartMessage" class="empty-cart hidden">
-                <p>Keranjang Anda kosong. Yuk, belanja sekarang!</p>
-            </div>
-            <div class="cart-total">
-                <h3>Total Belanja:</h3>
-                <span id="cartTotalAmount" class="total-amount">Rp 0</span>
-            </div>
-            <div class="cart-actions">
-                <button class="cart-btn cart-btn-primary" onclick="checkout()">Checkout via WhatsApp</button>
-                <button class="cart-btn cart-btn-secondary" onclick="closeCart()">Lanjutkan Belanja</button>
-                <button class="cart-btn cart-btn-danger" onclick="clearCart()">Kosongkan Keranjang</button>
-            </div>
-        </div>
+  <section id="kegiatan">
+    <div class="section-header"><div class="section-tag">Aktivitas</div><h2 class="section-title">🎉 Kegiatan & Foto Terkini</h2><div class="section-line"></div></div>
+    <div class="kegiatan-strip" id="kegiatanStrip"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="quick-access">
+      <div class="qa-title">⚡ Akses Cepat Layanan</div>
+      <div class="qa-buttons">
+        <a href="https://kependudukan.jogjaprov.go.id/" target="_blank" rel="noopener" class="qa-btn primary">🪪 Layanan Dukcapil</a>
+        <a href="https://dukcapil.jogjaprov.go.id/" target="_blank" rel="noopener" class="qa-btn green">🪪 Adminduk Online</a>
+        <a href="https://sid.kemendesa.go.id/" target="_blank" rel="noopener" class="qa-btn green">🗂️ SID Kemendes</a>
+        <a href="https://wa.me/628123456789" target="_blank" rel="noopener" class="qa-btn teal">💬 WhatsApp Desa</a>
+        <a href="mailto:info@kedungsari.id" class="qa-btn teal">✉️ Surel Kalurahan</a>
+      </div>
+    </div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h2>🏛️ Rumah Data Kependudukan<br>Kalurahan Kedungsari</h2>
+        <p>Kami berkomitmen menyajikan data kependudukan yang akurat, transparan, dan mudah diakses demi terwujudnya pemerintahan desa yang bersih dan melayani.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#">🏠 Beranda</a></li>
+          <li><a href="#foto">🖼️ Galeri Foto</a></li>
+          <li><a href="#laporan">📋 Laporan</a></li>
+          <li><a href="#kegiatan">🎉 Kegiatan</a></li>
+          <li><a href="#kontak">📍 Kontak</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Info Kontak</h4>
+        <ul>
+          <li><a href="#">📍 Jl. Raya Kedungsari No.1, Yogyakarta</a></li>
+          <li><a href="tel:+6274123456">📞 (0274) 123-4567</a></li>
+          <li><a href="mailto:info@kedungsari.id">✉️ info@kedungsari.id</a></li>
+          <li><a href="#">🕐 Senin–Kamis, 08.00–14.00</a></li>
+          <li><a href="#">🌐 kalurahan-kedungsari.github.io</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Kalurahan Kedungsari · Dibuat dengan ❤️ untuk <span>transparansi data</span> desa</p>
+      <div class="footer-badge">🇮🇩 &nbsp; Open Data &nbsp;·&nbsp; v2.3</div>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" aria-label="Kembali ke atas">↑</button>
+
+<div class="lightbox" id="lightbox" onclick="closeLB(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLB()">✕</button>
+    <div class="lightbox-content" id="lbContent"></div>
+    <div class="lightbox-caption" id="lbCaption"></div>
+  </div>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="gallery-modal" id="galleryModal">
+  <div class="gallery-modal-content">
+    <div class="gallery-modal-header">
+      <h3 id="galleryTitle">Galeri Foto</h3>
+      <button class="gallery-close-btn" onclick="closeGallery()">✕</button>
+    </div>
+    <div class="gallery-modal-body">
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div id="adminBadge">⚙️ Mode Admin Aktif</div>
+<div id="toast"></div>
+
+<div id="pinModal" role="dialog" aria-modal="true">
+  <div class="pin-box">
+    <h2>🔐 Admin Panel</h2>
+    <p>Masukkan PIN 4 digit untuk masuk</p>
+    <div class="pin-dots">
+      <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-key" onclick="pk('1')">1</button>
+      <button class="pin-key" onclick="pk('2')">2</button>
+      <button class="pin-key" onclick="pk('3')">3</button>
+      <button class="pin-key" onclick="pk('4')">4</button>
+      <button class="pin-key" onclick="pk('5')">5</button>
+      <button class="pin-key" onclick="pk('6')">6</button>
+      <button class="pin-key" onclick="pk('7')">7</button>
+      <button class="pin-key" onclick="pk('8')">8</button>
+      <button class="pin-key" onclick="pk('9')">9</button>
+      <button class="pin-key del" onclick="pk('clr')">Hapus</button>
+      <button class="pin-key" onclick="pk('0')">0</button>
+      <button class="pin-key del" onclick="pk('back')">←</button>
+    </div>
+    <div class="pin-error" id="pinErr"></div>
+    <button class="pin-close-btn" onclick="closePIN()">Batal</button>
+  </div>
+</div>
+
+<div id="adminPanel">
+  <div class="ap-header">
+    <h2>⚙️ Panel Admin</h2>
+    <div class="ap-hbtns">
+      <button class="ap-logout-btn" onclick="adminLogout()">Keluar</button>
+      <button class="ap-close" onclick="closeAdmin()">✕</button>
+    </div>
+  </div>
+  <div class="ap-tabs">
+    <button class="ap-tab active" onclick="swTab('stat',this)">Statistik</button>
+    <button class="ap-tab" onclick="swTab('foto',this)">Foto</button>
+    <button class="ap-tab" onclick="swTab('lap',this)">Laporan</button>
+    <button class="ap-tab" onclick="swTab('keg',this)">Kegiatan</button>
+  </div>
+  <div class="ap-body">
+    <!-- STATISTIK -->
+    <div class="ap-panel active" id="tab-stat">
+      <div class="ap-form-title">Edit Data Statistik</div>
+      <div class="ap-field"><label>Penduduk</label><input id="f_p" placeholder="12345"/></div>
+      <div class="ap-field"><label>Kepala Keluarga</label><input id="f_kk" placeholder="3456"/></div>
+      <div class="ap-field"><label>Dusun</label><input id="f_ds" placeholder="6"/></div>
+      <div class="ap-field"><label>Tahun</label><input id="f_thn" placeholder="2025"/></div>
+      <div class="ap-field"><label>Dash 1 Nilai</label><input id="f_d1" placeholder="5678"/></div>
+      <div class="ap-field"><label>Dash 1 Sub</label><input id="f_d1s" placeholder="Laki-laki"/></div>
+      <div class="ap-field"><label>Dash 2 Nilai</label><input id="f_d2" placeholder="6789"/></div>
+      <div class="ap-field"><label>Dash 2 Sub</label><input id="f_d2s" placeholder="Perempuan"/></div>
+      <div class="ap-field"><label>Dash 3 Nilai</label><input id="f_d3" placeholder="890"/></div>
+      <div class="ap-field"><label>Dash 3 Sub</label><input id="f_d3s" placeholder="Usia Kerja"/></div>
+      <div class="ap-field"><label>Dash 4 Nilai</label><input id="f_d4" placeholder="234"/></div>
+      <div class="ap-field"><label>Dash 4 Sub</label><input id="f_d4s" placeholder="Wajib Sekolah"/></div>
+      <div class="ap-field"><label>Dash 5 Nilai</label><input id="f_d5" placeholder="567"/></div>
+      <div class="ap-field"><label>Dash 5 Sub</label><input id="f_d5s" placeholder=">60 tahun"/></div>
+      <div class="ap-field"><label>Dash 6 Nilai</label><input id="f_d6" placeholder="123"/></div>
+      <div class="ap-field"><label>Dash 6 Sub</label><input id="f_d6s" placeholder="0-5 tahun"/></div>
+      <div class="ap-field"><label>Ticker 1</label><input id="f_tk1" placeholder="Selamat datang"/></div>
+      <div class="ap-field"><label>Ticker 2</label><input id="f_tk2" placeholder="Data terbaru"/></div>
+      <div class="ap-field"><label>Ticker 3</label><input id="f_tk3" placeholder="Informasi penting"/></div>
+      <div class="ap-field"><label>Ticker 4</label><input id="f_tk4" placeholder=""/></div>
+      <div class="ap-field"><label>Ticker 5</label><input id="f_tk5" placeholder=""/></div>
+      <div class="ap-field"><label>Ticker 6</label><input id="f_tk6" placeholder=""/></div>
+      <div class="ap-btns"><button class="ap-btn save" onclick="saveStat()">💾 Simpan</button></div>
     </div>
 
-	<!-- Photo Gallery Modal -->
-    <div id="galleryModal" class="gallery-modal">
-        <div class="gallery-modal-content">
-            <span class="close" onclick="closeGallery()">&times;</span>
-            <div class="gallery-modal-header">
-                <h2 id="galleryTitle">Galeri Foto Produk</h2>
-                <p id="gallerySubtitle">Lihat foto-foto produk kami</p>
-            </div>
-            <div id="photoGalleryGrid" class="photo-gallery-grid"></div>
+    <!-- FOTO -->
+    <div class="ap-panel" id="tab-foto">
+      <button class="ap-add-btn" onclick="addFoto()">➕ Tambah Foto</button>
+      <div class="ap-form" id="fotoForm">
+        <input type="hidden" id="fotoIdx" value="-1"/>
+        <div class="ap-form-title" id="fotoLbl">Tambah Foto</div>
+        <div class="ap-field"><label>Emoji</label><input id="fotoE" placeholder="🏞️"/></div>
+        <div class="ap-field"><label>Judul</label><input id="fotoJ" placeholder="Judul foto"/></div>
+        <div class="ap-field"><label>Deskripsi</label><textarea id="fotoD" placeholder="Deskripsi singkat"></textarea></div>
+        <div class="ap-field"><label>Path Gambar (tanpa GITHUB_BASE)</label><input id="fotoImg" placeholder="foto/dinding1.jpg"/></div>
+        <div class="ap-field"><label>URL Video (opsional)</label><input id="fotoVid" placeholder="https://youtube.com/..."/></div>
+        <div class="ap-field"><label>Galeri Foto (pisahkan dengan koma)</label><textarea id="fotoGallery" placeholder="foto/gallery1.jpg,foto/gallery2.jpg"></textarea></div>
+        <div class="ap-btns">
+          <button class="ap-btn save" onclick="saveFoto()">💾 Simpan</button>
+          <button class="ap-btn cancel" onclick="cancelFoto()">❌ Batal</button>
         </div>
+      </div>
+      <div id="fotoList"></div>
     </div>
 
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <span id="notificationText"></span>
+    <!-- LAPORAN -->
+    <div class="ap-panel" id="tab-lap">
+      <button class="ap-add-btn" onclick="addL()">➕ Tambah Laporan</button>
+      <div class="ap-form" id="lForm">
+        <input type="hidden" id="lIdx" value="-1"/>
+        <div class="ap-form-title" id="lLbl">Tambah Laporan</div>
+        <div class="ap-field"><label>Emoji</label><input id="lE" placeholder="📄"/></div>
+        <div class="ap-field"><label>Judul</label><input id="lJ" placeholder="Laporan Keuangan Q1 2025"/></div>
+        <div class="ap-field"><label>Deskripsi</label><textarea id="lD" placeholder="Ringkasan laporan"></textarea></div>
+        <div class="ap-field"><label>Tanggal</label><input id="lT" placeholder="15 Januari 2025"/></div>
+        <div class="ap-field"><label>Label Tombol</label><input id="lB" placeholder="Lihat Foto"/></div>
+        <div class="ap-field"><label>URL</label><input id="lU" placeholder="https://..."/></div>
+        <div class="ap-field"><label>Path Gambar (tanpa GITHUB_BASE)</label><input id="lImg" placeholder="laporan/cover1.jpg"/></div>
+        <div class="ap-field"><label>URL Video (opsional)</label><input id="lVid" placeholder="https://youtube.com/..."/></div>
+        <div class="ap-field"><label>Galeri Foto (pisahkan dengan koma)</label><textarea id="lGallery" placeholder="laporan/gallery1.jpg,laporan/gallery2.jpg"></textarea></div>
+        <div class="ap-btns">
+          <button class="ap-btn save" onclick="saveL()">💾 Simpan</button>
+          <button class="ap-btn cancel" onclick="cancelL()">❌ Batal</button>
+        </div>
+      </div>
+      <div id="lList"></div>
     </div>
 
-    <script>
-        // Data admin WhatsApp
-        const adminList = [
-            {
-                id: 'admin-1',
-                name: 'Ika Diana',
-                phone: '6288802751611',
-                status: 'Online',
-                role: 'Admin Penjualan'
-            },
-            {
-                id: 'admin-2',
-                name: 'Eko Kusrianto',
-                phone: '628129683690',
-                status: 'Offline',
-                role: 'Admin Penjualan'
-            },
-            {
-                id: 'admin-3',
-                name: 'Suprapto',
-                phone: '62895331113616',
-                status: 'Online',
-                role: 'Admin Penjualan'
-            },
-            {
-                id: 'admin-4',
-                name: 'Margilan',
-                phone: '6288806174649',
-                status: 'Online',
-                role: 'Admin Penjualan'
-            },
-            {
-                id: 'admin-5',
-                name: 'Anung',
-                phone: '6285292001668',
-                status: 'Online',
-                role: 'Admin Penjualan'
-            }
-        ];
+    <!-- KEGIATAN -->
+    <div class="ap-panel" id="tab-keg">
+      <button class="ap-add-btn" onclick="addK()">➕ Tambah Kegiatan</button>
+      <div class="ap-form" id="kForm">
+        <input type="hidden" id="kIdx" value="-1"/>
+        <div class="ap-form-title" id="kLbl">Tambah Kegiatan</div>
+        <div class="ap-field"><label>Emoji</label><input id="kE" placeholder="🎉"/></div>
+        <div class="ap-field"><label>Judul</label><input id="kJ" placeholder="Gotong Royong Desa"/></div>
+        <div class="ap-field"><label>Tanggal</label><input id="kT" placeholder="20 Jan 2025"/></div>
+        <div class="ap-field"><label>Path Gambar (tanpa GITHUB_BASE)</label><input id="kImg" placeholder="kegiatan/event1.jpg"/></div>
+        <div class="ap-field"><label>URL Video (opsional)</label><input id="kVid" placeholder="https://youtube.com/..."/></div>
+        <div class="ap-field"><label>Galeri Foto (pisahkan dengan koma)</label><textarea id="kGallery" placeholder="kegiatan/gallery1.jpg,kegiatan/gallery2.jpg"></textarea></div>
+        <div class="ap-btns">
+          <button class="ap-btn save" onclick="saveK()">💾 Simpan</button>
+          <button class="ap-btn cancel" onclick="cancelK()">❌ Batal</button>
+        </div>
+      </div>
+      <div id="kList"></div>
+    </div>
+  </div>
+</div>
 
-        // Data produk dengan deskripsi terstruktur dan link video
-        const productGallery = [
-            // Madu
-            {
-                id: 'madu-1',
-                category: 'madu',
-                title: 'Envella Madu Kita',
-                description: [
-                    'Madu Multiflora',
-                    'Madu Asli, Murni & Alami'
-                ],
-                price: 55000,
-                unit: 'botol',
-                image: 'images/madu/madu-envella-1.jpg',
-                fallbackEmoji: '🍯',
-                stock: 'available',
-                stockCount: 50,
-                isPromo: false,
-                isNew: true,
-                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/madu/madu-envella-1.jpg', caption: 'Madu Multiflora' }
-                ]
-            },
-            {
-               id: 'madu-2',
-                category: 'madu',
-                title: 'Envella Madu Kita',
-                description: [
-					'Madu + butiran be pollen',
-                    'Madu Multiflora',
-                    'Madu Asli, Murni & Alami'
-                ],
-                price: 55000,
-                unit: 'botol',
-                image: 'images/madu/madu-envella-2.jpg',
-                fallbackEmoji: '🍯',
-                stock: 'available',
-                stockCount: 50,
-                isPromo: false,
-                isNew: true,
-                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/madu/madu-envella-2.jpg', caption: 'Madu Multiflora' }
-                ]
-            }, 
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   GITHUB INTEGRATION - SIMPAN LANGSUNG KE GITHUB
+   ═══════════════════════════════════════════════════════════════ */
 
-			// Minuman
-            {
-                id: 'minuman-1',
-                category: 'minuman',
-                title: 'Minuman Lidah Buaya',
-                description: [
-					'Minuman olahan Lidah Buaya',
-					'Minumah segar alamai kaya manfaat'
-				],
-                price: 10000,
-                unit: 'botol',
-                image: 'images/minuman/minuman-lidah_buaya.jpg',
-                fallbackEmoji: '🥤',
-                stock: 'available',
-                stockCount: 50,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/minuman/minuman-lidah_buaya.jpg', caption: 'Minuman Lidah Buaya botol' }
-                ]
-            },
-			
-			// Beras
-            {
-                id: 'beras-1',
-                category: 'beras',
-                title: 'Beras Putih SPHP Bulog',
-                description: [
-                    'Beras putih berkualitas premium dengan butiran pulen dan wangi khas',
-                    'Produk dari wilayah Kedungsari yang terkenal dengan tanah subur',
-                    'Tersedia dalam kemasan 5kg',
-                    'Proses penggilingan modern untuk menjaga kualitas beras',
-                    'Telah lulus uji kualitas SNI dan aman untuk dikonsumsi'
-                ],
-                price: 65000,
-                unit: '5kg',
-                image: 'images/beras/beras-sphp-bulog.jpg',
-                fallbackEmoji: '🌾',
-                stock: 'available',
-                stockCount: 50,
-                isPromo: false,
-                isNew: true,
-                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/beras/beras-hitam-premium.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/beras/beras-ketan-putih.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/beras/beras-merah-organik.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'beras-2',
-                category: 'beras',
-                title: 'Beras Lokal Inpari 32',
-                description: [
-					'Beras Lokal Kualitas terbaik'
-				],
-                price: 13000,
-                unit: 'kg',
-                image: 'images/beras/beras-impari32.jpg',
-                fallbackEmoji: '🌾',
-                stock: 'available',
-                stockCount: 30,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/shorts/rglFAoFa5ds',
-                hasVideo: true,
-				photos: [
-                    { url: 'images/beras/beras-premium.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/beras/beras-putih-premium.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/beras/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'beras-3',
-                category: 'beras',
-                title: 'Beras Ketan Putih',
-                description: [
-					'Beras ketan putih untuk berbagai olahan tradisional dan modern'
-				],
-                price: 13000,
-                unit: 'kg',
-                image: 'images/beras/beras-ketan-putih.jpg',
-                fallbackEmoji: '🌾',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/beras/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/beras/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/beras/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-			
-			// Gula
-            {
-                id: 'gula-1',
-                category: 'gula',
-                title: 'Gula Pasir Putih',
-                description: [
-					'Gula pasir dari tebu pilihan'
-				],
-                price: 17500,
-                unit: 'kg',
-                image: 'images/gula/gula-pasir-putih.jpg',
-                fallbackEmoji: '🍯',
-                stock: 'available',
-                stockCount: 50,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/gula/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/gula/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/gula/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },  
+// Konfigurasi GitHub - GANTI dengan repo Anda
+const GITHUB_CONFIG = {
+  owner: 'kalurahan-kedungsari',  // Username/organization GitHub
+  repo: 'kalurahan-kedungsari.github.io',  // Nama repository
+  token: 'ghp_YOUR_GITHUB_TOKEN_HERE',  // Personal Access Token GitHub
+  branch: 'main',  // Branch yang digunakan
+  dataFile: 'data.json'  // Nama file data
+};
 
-			// Pertanian
-            {
-                id: 'pertanian-1',
-                category: 'pertanian',
-                title: 'Pupuk Kohe',
-                description: [
-					'Kemasan karung 25 kg',
-					'Pupuk organik ramah lingkungan untuk penyubur tanah alami',
-					'Fermentasi kohe kambing'
-				],
-                price: 25000,
-                unit: 'karung',
-                image: 'images/pertanian/pupuk-kohe.jpg',
-                fallbackEmoji: '🧴',
-                stock: 'available',
-                stockCount: 50,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/pertanian/pupuk-kohe.jpg', caption: 'Pupuk kohe kambing' }
-                ]
-            },
-			{
-                id: 'pertanian-2',
-                category: 'pertanian',
-                title: 'Benih Padi Inpari 32',
-                description: [
-					'Kemasan Pack 5 kg',
-					'varietas padi sawah irigasi turunan Ciherang',
-					'umur panen sekitar 120 hari',
-					'potensi hasil sekitar 8,42 ton/ha',
-					'Tekstur nasi pulen',
-					'ketahanan terhadap wereng batang coklat (WBC) biotipe 1, 2, dan 3',
-					'Varietas ini juga memiliki ketahanan terhadap penyakit hawar daun bakteri strain III dan blas ras 033'
-				],
-                price: 85000,
-                unit: 'pack',
-                image: 'images/pertanian/benih-padi-inpari32.jpg',
-                fallbackEmoji: '🧴',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/pertanian/tanaman-padi-inpari32.jpeg', caption: 'Inpari 32' }
-                ]
-            },
-            
-            // Sayuran
-            {
-                id: 'sayuran-1',
-                category: 'sayuran',
-                title: 'Kangkung Organik',
-                description: [
-					'Kangkung segar tanpa pestisida langsung dari kebun organik lokal'
-				],
-                price: 3000,
-                unit: 'ikat',
-                image: 'images/sayuran/kangkung-organik.jpg',
-                fallbackEmoji: '🥬',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/sayuran/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/sayuran/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/sayuran/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'sayuran-2',
-                category: 'sayuran',
-                title: 'Bayam Merah',
-                description: [
-					'Bayam merah kaya zat besi dan vitamin untuk keluarga sehat'
-				],
-                price: 3500,
-                unit: 'ikat',
-                image: 'images/sayuran/bayam-merah.jpg',
-                fallbackEmoji: '🥬',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/sayuran/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/sayuran/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/sayuran/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'sayuran-3',
-                category: 'sayuran',
-                title: 'Sawi Hijau',
-                description: [
-					'Sawi hijau segar dengan daun lebar dan renyah, cocok untuk berbagai masakan'
-				],
-                price: 4000,
-                unit: 'ikat',
-                image: 'images/sayuran/sawi-hijau.jpg',
-                fallbackEmoji: '🥬',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/sayuran/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/sayuran/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/sayuran/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'sayuran-4',
-                category: 'sayuran',
-                title: 'Tomat Cherry',
-                description: [
-					'Tomat cherry manis dan segar untuk salad atau camilan sehat'
-				],
-                price: 8000,
-                unit: '250gr',
-                image: 'images/sayuran/tomat-cherry.jpg',
-                fallbackEmoji: '🍅',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/sayuran/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/sayuran/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/sayuran/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
+const GITHUB_BASE = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/`;
 
-            // Ikan
-            {
-                id: 'ikan-1',
-                category: 'ikan',
-                title: 'Ikan Lele Segar',
-                description: [
-					'Ikan lele segar dari kolam lokal, kaya protein dan omega-3'
-				],
-                price: 24000,
-                unit: 'kg',
-                image: 'images/ikan/ikan-lele.jpg',
-                fallbackEmoji: '🐟',
-                stock: 'available',
-                stockCount: 20,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=BBxC_tqT1z0',
-                hasVideo: true,
-				photos: [
-                    { url: 'images/ikan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/ikan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/ikan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'ikan-2',
-                category: 'ikan',
-                title: 'Ikan Nila Segar',
-                description: [
-					'Ikan nila segar dengan daging putih dan rasa yang lezat'
-				],
-                price: 30000,
-                unit: 'kg',
-                image: 'images/ikan/ikan-nila.jpg',
-                fallbackEmoji: '🐟',
-                stock: 'available',
-                stockCount: 18,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/ikan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/ikan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/ikan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'ikan-3',
-                category: 'ikan',
-                title: 'Ikan Gurame',
-                description: [
-					'Ikan gurame premium dengan daging tebal dan gurih'
-				],
-                price: 35000,
-                unit: 'kg',
-                image: 'images/ikan/ikan-gurame.jpg',
-                fallbackEmoji: '🐟',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/ikan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/ikan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/ikan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'ikan-4',
-                category: 'ikan',
-                title: 'Ikan Bandeng',
-                description: [
-					'Ikan bandeng segar khas lokal dengan cita rasa yang lezat'
-				],
-                price: 22000,
-                unit: 'kg',
-                image: 'images/ikan/ikan-bandeng.jpg',
-                fallbackEmoji: '🐟',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/ikan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/ikan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/ikan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
+let D = {
+  s: {p:'12,345',kk:'3,456',ds:'6',thn:'2025',
+      d1:'5,678',d1s:'Laki-laki',d2:'6,789',d2s:'Perempuan',
+      d3:'8,901',d3s:'Usia Kerja',d4:'2,345',d4s:'Wajib Sekolah',
+      d5:'567',d5s:'>60 tahun',d6:'123',d6s:'0-5 tahun',
+      tk1:'🌟 Data terbaru tahun 2025',tk2:'✨ Transparansi untuk kemajuan desa',
+      tk3:'🏛️ Open Data Kependudukan',tk4:'',tk5:'',tk6:''},
+  foto: [
+    {e:'🏞️',j:'Pemandangan Desa',d:'Sawah hijau membentang',img:'',vid:'',gallery:[]},
+    {e:'🏛️',j:'Kantor Kalurahan',d:'Gedung pemerintahan',img:'',vid:'',gallery:[]},
+    {e:'🌾',j:'Panen Raya',d:'Musim panen tiba',img:'',vid:'',gallery:[]}
+  ],
+  l: [
+    {e:'📄',j:'Laporan Keuangan Q1',d:'Ringkasan keuangan',t:'15 Jan 2025',b:'Lihat Foto',u:'#',img:'',vid:'',gallery:[]},
+    {e:'📊',j:'Data Demografi 2025',d:'Statistik penduduk',t:'10 Jan 2025',b:'Lihat Foto',u:'#',img:'',vid:'',gallery:[]}
+  ],
+  k: [
+    {e:'🎉',j:'Gotong Royong',t:'20 Jan 2025',img:'',vid:'',gallery:[]},
+    {e:'🎓',j:'Pelatihan UMKM',t:'18 Jan 2025',img:'',vid:'',gallery:[]}
+  ]
+};
 
-            // Daging
-            {
-                id: 'daging-1',
-                category: 'daging',
-                title: 'Daging Sapi Segar',
-                description: [
-					'Daging sapi lokal berkualitas premium untuk kebutuhan keluarga'
-				],
-                price: 120000,
-                unit: 'kg',
-                image: 'images/daging/daging-sapi.jpg',
-                fallbackEmoji: '🥩',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/daging/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/daging/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/daging/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'daging-2',
-                category: 'daging',
-                title: 'Daging Kambing',
-                description: [
-					'Daging kambing segar untuk masakan tradisional dan modern'
-				],
-                price: 110000,
-                unit: 'kg',
-                image: 'images/daging/daging-kambing.jpg',
-                fallbackEmoji: '🥩',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/daging/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/daging/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/daging/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'daging-3',
-                category: 'daging',
-                title: 'Daging Ayam Kampung',
-                description: [
-					'Ayam kampung asli dengan daging yang gurih dan sehat'
-				],
-                price: 85000,
-                unit: 'kg',
-                image: 'images/daging/ayam-kampung.jpg',
-                fallbackEmoji: '🐔',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/daging/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/daging/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/daging/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'daging-4',
-                category: 'daging',
-                title: 'Daging Bebek',
-                description: [
-					'Daging bebek segar untuk berbagai olahan kuliner nusantara'
-				],
-                price: 75000,
-                unit: 'kg',
-                image: 'images/daging/daging-bebek.jpg',
-                fallbackEmoji: '🦆',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/daging/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/daging/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/daging/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
+let currentGalleryImages = [];
+let currentGalleryType = '';
+let currentGalleryIndex = -1;
 
-            // Telur
-            {
-                id: 'telur-1',
-                category: 'telur',
-                title: 'Telur Ayam Kampung',
-                description: [
-					'Telur ayam kampung asli dengan kuning telur orange dan bergizi tinggi'
-				],
-                price: 2500,
-                unit: 'butir',
-                image: 'images/telur/telur-ayam-kampung.jpg',
-                fallbackEmoji: '🥚',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/telur/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/telur/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/telur/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'telur-2',
-                category: 'telur',
-                title: 'Telur Ayam Ras',
-                description: [
-					'Telur ayam ras segar untuk kebutuhan sehari-hari keluarga'
-				],
-                price: 28000,
-                unit: 'kg',
-                image: 'images/telur/telur-ayam-ras.jpg',
-                fallbackEmoji: '🥚',
-                stock: 'available',
-                stockCount: 150,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/telur/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/telur/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/telur/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'telur-3',
-                category: 'telur',
-                title: 'Telur Bebek',
-                description: [
-					'Telur bebek segar cocok untuk membuat kue dan masakan tradisional'
-				],
-                price: 2800,
-                unit: 'butir',
-                image: 'images/telur/telur-bebek.jpg',
-                fallbackEmoji: '🥚',
-                stock: 'available',
-                stockCount: 60,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=fnN2i7n6Mig',
-                hasVideo: true,
-				photos: [
-                    { url: 'images/telur/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/telur/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/telur/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'telur-4',
-                category: 'telur',
-                title: 'Telur Puyuh',
-                description: [
-					'Telur puyuh kecil yang bergizi tinggi dan cocok untuk camilan'
-				],
-                price: 1000,
-                unit: 'butir',
-                image: 'images/telur/telur-puyuh.jpg',
-                fallbackEmoji: '🥚',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/telur/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/telur/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/telur/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
+/* HELPER */
+const g = id => document.getElementById(id);
+const esc = s => {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+};
 
-            // Olahan
-            {
-                id: 'olahan-1',
-                category: 'olahan',
-                title: 'Tempe Kedelai',
-                description: [
-					'Tempe kedelai organik hasil fermentasi tradisional yang sehat'
-				],
-                price: 3000,
-                unit: 'papan',
-                image: 'images/olahan/tempe-organik.jpg',
-                fallbackEmoji: '🍜',
-                stock: 'available',
-                stockCount: 30,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'olahan-2',
-                category: 'olahan',
-                title: 'Tahu Putih',
-                description: [
-					'Tahu putih segar dibuat dengan kedelai berkualitas tinggi'
-				],
-                price: 5000,
-                unit: 'papan',
-                image: 'images/olahan/tahu-putih.jpg',
-                fallbackEmoji: '🍜',
-                stock: 'available',
-                stockCount: 40,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'olahan-3',
-                category: 'olahan',
-                title: 'Kerupuk Ikan',
-                description: [
-					'Kerupuk ikan tradisional dengan rasa gurih dan renyah'
-				],
-                price: 15000,
-                unit: 'pack',
-                image: 'images/olahan/kerupuk-ikan.jpg',
-                fallbackEmoji: '🍘',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'olahan-4',
-                category: 'olahan',
-                title: 'Sambal Pecel',
-                description: [
-					'Sambal pecel khas dengan bumbu rempah pilihan yang autentik'
-				],
-                price: 30000,
-                unit: 'pack',
-                image: 'images/olahan/sambal-pecel.jpg',
-                fallbackEmoji: '🌶️',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'olahan-5',
-                category: 'olahan',
-                title: 'Cireng Ayam Pedas',
-                description: [
-					'Cireng dengan isi daging ayam suwir pedas. Bisa digoreng atau mentah'
-				],
-                price: 1000,
-                unit: 'pcs',
-                image: 'images/olahan/cireng-ayam-pedas.jpg',
-                fallbackEmoji: '🌶️',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'olahan-6',
-                category: 'olahan',
-                title: 'Peyek Kacang Tanah',
-                description: [
-					'Peyek renyah'
-				],
-                price: 10000,
-                unit: 'bungkus',
-                image: 'images/olahan/peyek-kacang-tanah.jpg',
-                fallbackEmoji: '🌶️',
-                stock: 'available',
-                stockCount: 20,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'olahan-6',
-                category: 'olahan',
-                title: 'Peyek Kacang Tholo',
-                description: [
-					'Peyek renyah'
-				],
-                price: 10000,
-                unit: 'bungkus',
-                image: 'images/olahan/peyek-kacang-tholo.jpg',
-                fallbackEmoji: '🌶️',
-                stock: 'available',
-                stockCount: 20,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/olahan/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/olahan/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/olahan/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            
-            // Lain-lain
-            {
-                id: 'lainlain-1',
-                category: 'lainlain',
-                title: 'Gas Melon',
-                description: [
-					'Tabung gas melon untuk kebutuhan masak sehari-hari'
-				],
-                price: 21000,
-                unit: 'tabung',
-                image: 'images/lainlain/gas-melon.jpg',
-                fallbackEmoji: '⛽',
-                stock: 'available',
-                stockCount: 15,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/lainlain/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/lainlain/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/lainlain/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'lainlain-2',
-                category: 'lainlain',
-                title: 'Materai',
-                description: [
-					'Materai resmi untuk keperluan dokumen dan surat-surat penting'
-				],
-                price: 12000,
-                unit: 'pcs',
-                image: 'images/lainlain/materai.jpg',
-                fallbackEmoji: '📋',
-                stock: 'available',
-                stockCount: 100,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/lainlain/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/lainlain/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/lainlain/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'lainlain-3',
-                category: 'lainlain',
-                title: 'Tepung Terigu',
-                description: [
-					'Tepung terigu berkualitas untuk membuat berbagai kue dan masakan'
-				],
-                price: 5000,
-                unit: 'kg',
-                image: 'images/lainlain/tepung-terigu.jpg',
-                fallbackEmoji: '🌾',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/lainlain/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/lainlain/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/lainlain/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-            {
-                id: 'lainlain-4',
-                category: 'lainlain',
-                title: 'Buku Tulis',
-                description: [
-					'Buku tulis untuk kebutuhan sekolah dan kantor'
-				],
-                price: 6000,
-                unit: 'pcs',
-                image: 'images/lainlain/buku-tulis.jpg',
-                fallbackEmoji: '📓',
-                stock: 'out',
-                stockCount: 0,
-				isPromo: false,
-                isNew: true,
-				videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                hasVideo: false,
-				photos: [
-                    { url: 'images/lainlain/beras-sphp-1.jpg', caption: 'Beras SPHP Bulog kemasan 5kg dengan kualitas premium' },
-                    { url: 'images/lainlain/beras-sphp-2.jpg', caption: 'Butiran beras yang pulen dan wangi khas' },
-                    { url: 'images/lainlain/beras-sphp-3.jpg', caption: 'Proses penggilingan modern untuk menjaga kualitas' }
-                ]
-            },
-		];
+function showToast(msg) {
+  const t = g('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 
-        // State management menggunakan memori JavaScript
-        let cart = [];
-        let selectedAdminPhone = adminList[0].phone;
-        
-        const cartCountDesktop = document.getElementById('cartCountDesktop');
-        const cartCountMobile = document.getElementById('cartCountMobile');
-        const cartItemsContainer = document.getElementById('cartItemsContainer');
-        const cartTotalAmount = document.getElementById('cartTotalAmount');
-        const emptyCartMessage = document.getElementById('emptyCartMessage');
-        const cartModal = document.getElementById('cartModal');
-        const notification = document.getElementById('notification');
-		const galleryModal = document.getElementById('galleryModal');
+function scrollToForm(id) {
+  setTimeout(() => {
+    const el = g(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
 
-        function updateCartCount() {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCountDesktop.innerText = totalItems;
-            cartCountMobile.innerText = totalItems;
-        }
+/* ═══════════════════════════════════════════════════════════════
+   GITHUB FUNCTIONS - LOAD & SAVE DATA
+   ═══════════════════════════════════════════════════════════════ */
 
-        function formatRupiah(number) {
-            return new Intl.NumberFormat('id-ID', { 
-                style: 'currency', 
-                currency: 'IDR', 
-                minimumFractionDigits: 0 
-            }).format(number);
-        }
+async function loadFromGitHub() {
+  try {
+    const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.dataFile}?ref=${GITHUB_CONFIG.branch}`;
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `token ${GITHUB_CONFIG.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      const content = atob(data.content);
+      D = JSON.parse(content);
+      console.log('✅ Data berhasil dimuat dari GitHub');
+      return data.sha; // Return SHA untuk update nanti
+    } else if (response.status === 404) {
+      console.log('ℹ️ File belum ada di GitHub, akan dibuat saat save');
+      return null;
+    } else {
+      console.error('❌ Gagal memuat data dari GitHub:', response.status);
+      return null;
+    }
+  } catch (error) {
+    console.error('❌ Error loading from GitHub:', error);
+    return null;
+  }
+}
 
-        function showNotification(message, isError = false) {
-            const notificationText = document.getElementById('notificationText');
-            notificationText.innerText = message;
-            notification.className = `notification ${isError ? 'error' : ''} show`;
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+async function saveToGitHub() {
+  try {
+    // Get current file SHA if exists
+    const checkUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.dataFile}?ref=${GITHUB_CONFIG.branch}`;
+    let sha = null;
+    
+    const checkResponse = await fetch(checkUrl, {
+      headers: {
+        'Authorization': `token ${GITHUB_CONFIG.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    if (checkResponse.ok) {
+      const existingFile = await checkResponse.json();
+      sha = existingFile.sha;
+    }
+    
+    // Prepare data
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(D, null, 2))));
+    const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.dataFile}`;
+    
+    const body = {
+      message: `Update data - ${new Date().toISOString()}`,
+      content: content,
+      branch: GITHUB_CONFIG.branch
+    };
+    
+    if (sha) {
+      body.sha = sha;
+    }
+    
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${GITHUB_CONFIG.token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    
+    if (response.ok) {
+      console.log('✅ Data berhasil disimpan ke GitHub');
+      showToast('✅ Data berhasil disimpan ke GitHub');
+      return true;
+    } else {
+      const error = await response.json();
+      console.error('❌ Gagal menyimpan ke GitHub:', error);
+      showToast('❌ Gagal menyimpan ke GitHub');
+      return false;
+    }
+  } catch (error) {
+    console.error('❌ Error saving to GitHub:', error);
+    showToast('❌ Error: ' + error.message);
+    return false;
+  }
+}
 
-        function getBadges(product) {
-            let badges = '';
-            
-            if (product.stockCount === 0 || product.stock === 'out') {
-                badges += '<div class="badge stock-badge stock-out">Habis</div>';
-            } else if (product.stockCount <= 10 || product.stock === 'low') {
-                badges += '<div class="badge stock-badge stock-low">Stok Terbatas</div>';
-            } else {
-                badges += '<div class="badge stock-badge stock-available">Tersedia</div>';
-            }
-            
-            if (product.isPromo) {
-                badges += '<div class="badge promo-badge">PROMO</div>';
-            }
-            
-            if (product.isNew) {
-                badges += '<div class="badge new-badge">BARU</div>';
-            }
-            
-            return badges;
-        }
-		
-		function openGallery(productId) {
-            const product = productGallery.find(p => p.id === productId);
-            if (!product) return;
+/* ═══════════════════════════════════════════════════════════════
+   RENDER FUNCTIONS
+   ═══════════════════════════════════════════════════════════════ */
 
-            document.getElementById('galleryTitle').innerText = `Galeri Foto - ${product.title}`;
-            document.getElementById('gallerySubtitle').innerText = `${product.category.toUpperCase()} | ${formatRupiah(product.price)}/${product.unit}`;
-            
-            const photoGalleryGrid = document.getElementById('photoGalleryGrid');
-            photoGalleryGrid.innerHTML = '';
-            
-            const photos = product.photos || [];
-            
-            if (photos.length === 0) {
-                photoGalleryGrid.innerHTML = '<div class="gallery-empty"><div class="gallery-empty-icon">📷</div><p>Belum ada foto galeri untuk produk ini</p></div>';
-            } else {
-                photos.forEach((photo, index) => {
-                    const photoItem = document.createElement('div');
-                    photoItem.className = 'photo-gallery-item';
-                    photoItem.innerHTML = `
-                        <img src="${photo.url}" alt="${product.title} - Foto ${index + 1}" 
-                             onerror="this.parentElement.innerHTML='<div style=\\'padding: 80px 20px; text-align: center; color: #999; background: #f8f9fa;\\'>📷<br>Foto tidak tersedia</div>'">
-                        <div class="photo-gallery-item-info">
-                            <h4>Foto ${index + 1}</h4>
-                            <p>${photo.caption}</p>
-                        </div>
-                    `;
-                    photoGalleryGrid.appendChild(photoItem);
-                });
-            }
-            galleryModal.style.display = 'block';
-        }
+function renderAll() {
+  renderStat();
+  renderFoto();
+  renderLaporan();
+  renderKegiatan();
+  renderHero();
+}
 
-        function closeGallery() {
-            galleryModal.style.display = 'none';
-        }
+function renderStat() {
+  const s = D.s;
+  g('hPenduduk').textContent = s.p;
+  g('hKK').textContent = s.kk;
+  g('hDusun').textContent = s.ds;
+  g('hTahun').textContent = s.thn;
+  g('dashboardRow').innerHTML = `
+    <div class="dash-card dc-green" data-emoji="👨"><div class="dc-label">Jenis Kelamin</div><div class="dc-value">${esc(s.d1)}</div><div class="dc-sub">${esc(s.d1s)}</div></div>
+    <div class="dash-card dc-gold" data-emoji="👩"><div class="dc-label">Jenis Kelamin</div><div class="dc-value">${esc(s.d2)}</div><div class="dc-sub">${esc(s.d2s)}</div></div>
+    <div class="dash-card dc-teal" data-emoji="💼"><div class="dc-label">Demografi</div><div class="dc-value">${esc(s.d3)}</div><div class="dc-sub">${esc(s.d3s)}</div></div>
+    <div class="dash-card dc-red" data-emoji="🎒"><div class="dc-label">Pendidikan</div><div class="dc-value">${esc(s.d4)}</div><div class="dc-sub">${esc(s.d4s)}</div></div>
+    <div class="dash-card dc-gold" data-emoji="👴"><div class="dc-label">Lansia</div><div class="dc-value">${esc(s.d5)}</div><div class="dc-sub">${esc(s.d5s)}</div></div>
+    <div class="dash-card dc-teal" data-emoji="👶"><div class="dc-label">Balita</div><div class="dc-value">${esc(s.d6)}</div><div class="dc-sub">${esc(s.d6s)}</div></div>
+  `;
+  const tk = [s.tk1, s.tk2, s.tk3, s.tk4, s.tk5, s.tk6].filter(x => x);
+  g('tickerContent').innerHTML = (tk.join(' &nbsp;•&nbsp; ') + ' &nbsp;•&nbsp; ').repeat(3);
+}
 
-        function changeQuantity(productId, change) {
-            const quantityInput = document.getElementById(`quantity-${productId}`);
-            let currentQuantity = parseInt(quantityInput.value);
-            const product = productGallery.find(p => p.id === productId);
-            
-            currentQuantity += change;
-            if (currentQuantity < 1) {
-                currentQuantity = 1;
-            }
-            if (currentQuantity > product.stockCount) {
-                currentQuantity = product.stockCount;
-                showNotification(`Stok ${product.title} hanya tersisa ${product.stockCount}`, true);
-            }
-            quantityInput.value = currentQuantity;
-        }
+function renderFoto() {
+  const c = g('photoWall');
+  if (!c) return;
+  c.innerHTML = D.foto.map((f, i) => {
+    const hasGallery = f.gallery && f.gallery.length > 0;
+    const galleryBtn = hasGallery ? `<button class="photo-gallery-btn" onclick="event.stopPropagation();openGallery('foto', ${i})" title="Lihat Galeri Foto">📷 Galeri</button>` : '';
+    const videoBtn = f.vid ? `<button class="card-video-btn" onclick="event.stopPropagation();window.open('${esc(f.vid)}','_blank')">▶️ Video</button>` : '';
+    
+    if (f.img) {
+      const imgUrl = GITHUB_BASE + f.img;
+      return `<div class="photo-frame" onclick="openPhotoLB(${i})">
+        ${galleryBtn}
+        ${videoBtn}
+        <img src="${imgUrl}" alt="${esc(f.j)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+        <div class="product-image-placeholder" style="display:none">${f.e}</div>
+        <div class="frame-label"><strong>${esc(f.j)}</strong><span>${esc(f.d)}</span></div>
+      </div>`;
+    } else {
+      return `<div class="photo-frame" onclick="openFotoLB('${f.e}','${esc(f.j)}','${esc(f.d)}')">
+        ${galleryBtn}
+        ${videoBtn}
+        <div class="emoji-frame"><span class="big-emoji">${f.e}</span><span class="frame-caption">${esc(f.d)}</span></div>
+        <div class="frame-label"><strong>${esc(f.j)}</strong><span>${esc(f.d)}</span></div>
+      </div>`;
+    }
+  }).join('');
+}
 
-        function addToCart(productId) {
-            const product = productGallery.find(p => p.id === productId);
-            const quantityInput = document.getElementById(`quantity-${productId}`);
-            const quantity = parseInt(quantityInput.value);
-            
-            if (product.stockCount === 0) {
-                showNotification('Produk ini sedang habis', true);
-                return;
-            }
-            
-            if (quantity > product.stockCount) {
-                showNotification(`Stok ${product.title} hanya tersisa ${product.stockCount}`, true);
-                return;
-            }
-            
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                const newQuantity = existingItem.quantity + quantity;
-                if (newQuantity > product.stockCount) {
-                    showNotification(`Total tidak boleh melebihi stok yang tersedia (${product.stockCount})`, true);
-                    return;
-                }
-                existingItem.quantity = newQuantity;
-            } else {
-                cart.push({
-                    id: productId,
-                    title: product.title,
-                    price: product.price,
-                    unit: product.unit,
-                    quantity: quantity,
-                    image: product.image,
-                    fallbackEmoji: product.fallbackEmoji
-                });
-            }
-            
-            updateCartCount();
-            showNotification(`${quantity} ${product.unit} ${product.title} ditambahkan ke keranjang!`);
-            quantityInput.value = 1;
-        }
+function renderLaporan() {
+  const c = g('reportsGrid');
+  if (!c) return;
+  c.innerHTML = D.l.map((l, i) => {
+    const hasGallery = l.gallery && l.gallery.length > 0;
+    const galleryBtn = hasGallery ? `<button class="photo-gallery-btn" onclick="event.stopPropagation();openGallery('laporan', ${i})" title="Lihat Galeri Foto">📷 Galeri</button>` : '';
+    const videoBtn = l.vid ? `<button class="card-video-btn" onclick="event.stopPropagation();window.open('${esc(l.vid)}','_blank')">▶️ Video</button>` : '';
+    
+    let imgTag = '';
+    if (l.img) {
+      const imgUrl = GITHUB_BASE + l.img;
+      imgTag = `<div class="img-container">${galleryBtn}${videoBtn}<img src="${imgUrl}" alt="${esc(l.j)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/><div class="product-image-placeholder" style="display:none;height:180px">${l.e}</div></div>`;
+    } else {
+      imgTag = `<div class="report-icon">${l.e}</div>`;
+    }
+    
+    return `<div class="report-card" onclick="window.open('${esc(l.u || '#')}','_blank')">
+      ${imgTag}
+      <h3>${esc(l.j)}</h3>
+      <p>${esc(l.d)}</p>
+      <div class="report-meta">
+        <span class="report-date">${esc(l.t)}</span>
+        <button class="report-btn" onclick="event.stopPropagation();window.open('${esc(l.u || '#')}','_blank')">${esc(l.b)}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-        function renderAdminSelection() {
-            const adminGrid = document.getElementById('adminGrid');
-            adminGrid.innerHTML = '';
-            adminList.forEach(admin => {
-                const adminCard = document.createElement('div');
-                adminCard.className = `admin-card ${selectedAdminPhone === admin.phone ? 'selected' : ''}`;
-                adminCard.onclick = () => selectAdmin(admin.phone);
-                adminCard.innerHTML = `
-                    <div class="admin-name">${admin.name}</div>
-                    <div class="admin-phone">${admin.role}</div>
-                    <div class="admin-status">${admin.status}</div>
-                `;
-                adminGrid.appendChild(adminCard);
-            });
-        }
+function renderKegiatan() {
+  const c = g('kegiatanStrip');
+  if (!c) return;
+  c.innerHTML = D.k.map((k, i) => {
+    const hasGallery = k.gallery && k.gallery.length > 0;
+    const galleryBtn = hasGallery ? `<button class="photo-gallery-btn" onclick="event.stopPropagation();openGallery('kegiatan', ${i})" title="Lihat Galeri Foto">📷 Galeri</button>` : '';
+    const videoBtn = k.vid ? `<button class="card-video-btn" onclick="event.stopPropagation();window.open('${esc(k.vid)}','_blank')">▶️ Video</button>` : '';
+    
+    if (k.img) {
+      const imgUrl = GITHUB_BASE + k.img;
+      return `<div class="kegiatan-card" onclick="openKegiatanLB(${i})">
+        <div class="img-container">${galleryBtn}${videoBtn}<img src="${imgUrl}" alt="${esc(k.j)}" onerror="this.style.display='none'; this.parentElement.nextElementSibling.style.display='flex';"/></div>
+        <div class="kegiatan-img" style="display:none">${k.e}</div>
+        <div class="kegiatan-info"><h4>${esc(k.j)}</h4><span>${esc(k.t)}</span></div>
+      </div>`;
+    } else {
+      return `<div class="kegiatan-card" onclick="openKegiatanLB(${i})">
+        ${galleryBtn}
+        ${videoBtn}
+        <div class="kegiatan-img">${k.e}</div>
+        <div class="kegiatan-info"><h4>${esc(k.j)}</h4><span>${esc(k.t)}</span></div>
+      </div>`;
+    }
+  }).join('');
+}
 
-        function selectAdmin(phone) {
-            selectedAdminPhone = phone;
-            renderAdminSelection();
-        }
+function renderHero() {
+  const heroImg = GITHUB_BASE + 'hero.jpg';
+  g('heroImage').innerHTML = `<img src="${heroImg}" alt="Hero Kalurahan Kedungsari" onerror="this.style.display='none'"/>`;
+}
 
-        function renderGallery(filter = 'all') {
-            const galleryGrid = document.getElementById('galleryGrid');
-            galleryGrid.innerHTML = '';
-            
-            const filteredProducts = filter === 'all' 
-                ? productGallery 
-                : productGallery.filter(product => product.category === filter);
-            
-            filteredProducts.forEach(product => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
-                galleryItem.dataset.category = product.category;
-                
-                const isOutOfStock = product.stockCount === 0;
-                
-                const descriptionHtml = `
-                    <ul class="description-list">
-                        ${product.description.map(desc => `<li>${desc}</li>`).join('')}
-                    </ul>
-                `;
-                
-                const videoHtml = product.hasVideo && product.videoUrl ? `
-                    <div class="item-video">
-                        <a href="${product.videoUrl}" target="_blank" class="video-link">
-                            ▶️ Tonton Video Produk
-                        </a>
-                    </div>
-                ` : '';
-                
-                galleryItem.innerHTML = `
-                    <div class="gallery-item-image">
-                        <img src="${product.image}" alt="${product.title}" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="product-image-placeholder" style="display: none; font-size: 4rem; color: #adb5bd; display: flex; align-items: center; justify-content: center; height: 100%;">${product.fallbackEmoji}</div>
-                        <div class="badges-container">${getBadges(product)}</div>
-						<button class="photo-gallery-btn" onclick="openGallery('${product.id}')" title="Lihat Galeri Foto">📷</button>
-                    </div>
-                    <div class="gallery-item-content">
-                        <div class="item-category">${product.category}</div>
-                        <h3 class="item-title">${product.title}</h3>
-                        <div class="item-description">
-                            ${descriptionHtml}
-                        </div>
-                        ${videoHtml}
-                        <div class="item-price">${formatRupiah(product.price)}/${product.unit}</div>
-                        <div class="quantity-selector">
-                            <span class="quantity-label">Jumlah:</span>
-                            <div class="quantity-controls">
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', -1)" ${isOutOfStock ? 'disabled' : ''}>-</button>
-                                <input type="number" id="quantity-${product.id}" value="1" min="1" max="${product.stockCount}" class="quantity-input" ${isOutOfStock ? 'disabled' : ''}>
-                                <button class="quantity-btn" onclick="changeQuantity('${product.id}', 1)" ${isOutOfStock ? 'disabled' : ''}>+</button>
-                            </div>
-                        </div>
-                        <button class="add-to-cart-btn" onclick="addToCart('${product.id}')" ${isOutOfStock ? 'disabled' : ''}>
-                            ${isOutOfStock ? '❌ Habis' : '🛒 Tambah ke Keranjang'}
-                        </button>
-                    </div>
-                `;
-                
-                galleryGrid.appendChild(galleryItem);
-            });
-        }
+/* ═══════════════════════════════════════════════════════════════
+   GALLERY FUNCTIONS - seperti product.html
+   ═══════════════════════════════════════════════════════════════ */
 
-        function filterGallery(category) {
-            renderGallery(category);
-            
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.category-btn[onclick="filterGallery('${category}')"]`).classList.add('active');
-        }
+function openGallery(type, index) {
+  currentGalleryType = type;
+  currentGalleryIndex = index;
+  
+  let item, title;
+  if (type === 'foto') {
+    item = D.foto[index];
+    title = item.j;
+  } else if (type === 'laporan') {
+    item = D.l[index];
+    title = item.j;
+  } else if (type === 'kegiatan') {
+    item = D.k[index];
+    title = item.j;
+  }
+  
+  currentGalleryImages = item.gallery || [];
+  
+  g('galleryTitle').textContent = `Galeri: ${title}`;
+  const grid = g('galleryGrid');
+  
+  if (currentGalleryImages.length === 0) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--brown-lite);">Belum ada foto di galeri</p>';
+  } else {
+    grid.innerHTML = currentGalleryImages.map((imgPath, idx) => {
+      const imgUrl = GITHUB_BASE + imgPath;
+      return `<div class="gallery-item" onclick="openGalleryImage(${idx})">
+        <img src="${imgUrl}" alt="Galeri ${idx + 1}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+        <div class="product-image-placeholder" style="display:none;height:200px;">🖼️</div>
+      </div>`;
+    }).join('');
+  }
+  
+  g('galleryModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
 
-        function renderCartItems() {
-            cartItemsContainer.innerHTML = '';
-            let total = 0;
-            
-            if (cart.length === 0) {
-                emptyCartMessage.classList.remove('hidden');
-                document.querySelector('.cart-total').classList.add('hidden');
-            } else {
-                emptyCartMessage.classList.add('hidden');
-                document.querySelector('.cart-total').classList.remove('hidden');
-                
-                cart.forEach((item, index) => {
-                    const itemTotal = item.price * item.quantity;
-                    total += itemTotal;
-                    const itemDiv = document.createElement('div');
-                    itemDiv.classList.add('cart-item');
-                    itemDiv.innerHTML = `
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${item.title}</div>
-                            <div class="cart-item-details">${formatRupiah(item.price)}/${item.unit}</div>
-                            <div class="cart-item-quantity">
-                                <button class="cart-quantity-btn" onclick="updateCartItemQuantity(${index}, -1)">-</button>
-                                <span>${item.quantity} ${item.unit}</span>
-                                <button class="cart-quantity-btn" onclick="updateCartItemQuantity(${index}, 1)">+</button>
-                            </div>
-                        </div>
-                        <span class="cart-item-price">${formatRupiah(itemTotal)}</span>
-                        <button class="cart-item-remove" onclick="removeCartItem(${index})">Hapus</button>
-                    `;
-                    cartItemsContainer.appendChild(itemDiv);
-                });
-            }
-            cartTotalAmount.innerText = formatRupiah(total);
-        }
+function closeGallery() {
+  g('galleryModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
-        function updateCartItemQuantity(index, change) {
-            const item = cart[index];
-            const product = productGallery.find(p => p.id === item.id);
-            
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                removeCartItem(index);
-            } else if (item.quantity > product.stockCount) {
-                item.quantity = product.stockCount;
-                showNotification(`Stok ${product.title} hanya tersisa ${product.stockCount}`, true);
-                renderCartItems();
-                updateCartCount();
-            } else {
-                renderCartItems();
-                updateCartCount();
-            }
-        }
+function openGalleryImage(idx) {
+  const imgUrl = GITHUB_BASE + currentGalleryImages[idx];
+  g('lbContent').innerHTML = `<img src="${imgUrl}" alt="Galeri ${idx + 1}"/>`;
+  g('lbCaption').innerHTML = `<strong>Foto ${idx + 1} dari ${currentGalleryImages.length}</strong>`;
+  g('lightbox').classList.add('active');
+}
 
-        function removeCartItem(index) {
-            cart.splice(index, 1);
-            renderCartItems();
-            updateCartCount();
-        }
+/* ═══════════════════════════════════════════════════════════════
+   ADMIN LIST RENDER
+   ═══════════════════════════════════════════════════════════════ */
 
-        function openCart() {
-            renderCartItems();
-            renderAdminSelection();
-            cartModal.style.display = 'block';
-        }
+function renderFotoList() {
+  const c = g('fotoList');
+  if (!c) return;
+  c.innerHTML = D.foto.map((f, i) => `<div class="ap-list-item">
+    <span style="font-size:1.3rem;flex-shrink:0">${f.e}</span>
+    <div class="ap-list-body"><strong>${esc(f.j)}</strong><span>${esc(f.d)}</span></div>
+    <div class="ap-list-actions">
+      <button class="ap-edit" onclick="editFoto(${i})">Edit</button>
+      <button class="ap-del" onclick="delFoto(${i})">Hapus</button>
+    </div>
+  </div>`).join('');
+}
 
-        function closeCart() {
-            cartModal.style.display = 'none';
-        }
+function renderLList() {
+  const c = g('lList');
+  if (!c) return;
+  c.innerHTML = D.l.map((l, i) => `<div class="ap-list-item">
+    <span style="font-size:1.3rem;flex-shrink:0">${l.e}</span>
+    <div class="ap-list-body"><strong>${esc(l.j)}</strong><span>${esc(l.d)}</span></div>
+    <div class="ap-list-actions">
+      <button class="ap-edit" onclick="editL(${i})">Edit</button>
+      <button class="ap-del" onclick="delL(${i})">Hapus</button>
+    </div>
+  </div>`).join('');
+}
 
-        function clearCart() {
-            cart = [];
-            renderCartItems();
-            updateCartCount();
-            showNotification('Keranjang belanja berhasil dikosongkan.');
-        }
+function renderKList() {
+  const c = g('kList');
+  if (!c) return;
+  c.innerHTML = D.k.map((k, i) => `<div class="ap-list-item">
+    <span style="font-size:1.3rem;flex-shrink:0">${k.e}</span>
+    <div class="ap-list-body"><strong>${esc(k.j)}</strong><span>${esc(k.t)}</span></div>
+    <div class="ap-list-actions">
+      <button class="ap-edit" onclick="editK(${i})">Edit</button>
+      <button class="ap-del" onclick="delK(${i})">Hapus</button>
+    </div>
+  </div>`).join('');
+}
 
-        function checkout() {
-            if (cart.length === 0) {
-                showNotification('Keranjang Anda kosong. Tambahkan produk untuk checkout.', true);
-                return;
-            }
+/* ═══════════════════════════════════════════════════════════════
+   SAVE FUNCTIONS - with GitHub integration
+   ═══════════════════════════════════════════════════════════════ */
 
-            const selectedAdmin = adminList.find(admin => admin.phone === selectedAdminPhone);
-            let message = `Halo ${selectedAdmin.name}, saya ingin memesan produk berikut:\n\n`;
-            let total = 0;
+async function saveStat() {
+  const flds = ['p', 'kk', 'ds', 'thn', 'd1', 'd1s', 'd2', 'd2s', 'd3', 'd3s', 'd4', 'd4s', 'd5', 'd5s', 'd6', 'd6s', 'tk1', 'tk2', 'tk3', 'tk4', 'tk5', 'tk6'];
+  flds.forEach(k => {
+    const e = g('f_' + k);
+    if (e && e.value.trim()) D.s[k] = e.value.trim();
+  });
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderStat();
+    showToast('✅ Statistik berhasil disimpan ke GitHub');
+  }
+}
 
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                message += `- ${item.quantity} ${item.unit} ${item.title} - ${formatRupiah(itemTotal)}\n`;
-            });
+/* FOTO */
+function addFoto() {
+  g('fotoIdx').value = -1;
+  g('fotoE').value = '🏞️';
+  g('fotoJ').value = '';
+  g('fotoD').value = '';
+  g('fotoImg').value = '';
+  g('fotoVid').value = '';
+  g('fotoGallery').value = '';
+  g('fotoLbl').textContent = 'Tambah Foto';
+  g('fotoForm').classList.add('active');
+  scrollToForm('fotoForm');
+}
 
-            message += `\nTotal Belanja: ${formatRupiah(total)}`;
-            message += `\n\nNama: [Isi nama Anda]\nAlamat: [Isi alamat Anda]\nCatatan: [Isi catatan tambahan jika ada]`;
+function editFoto(i) {
+  const f = D.foto[i];
+  g('fotoIdx').value = i;
+  g('fotoE').value = f.e;
+  g('fotoJ').value = f.j;
+  g('fotoD').value = f.d;
+  g('fotoImg').value = f.img || '';
+  g('fotoVid').value = f.vid || '';
+  g('fotoGallery').value = (f.gallery || []).join(',');
+  g('fotoLbl').textContent = 'Edit Foto';
+  g('fotoForm').classList.add('active');
+  scrollToForm('fotoForm');
+}
 
-            const whatsappUrl = `https://wa.me/${selectedAdminPhone}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
+async function saveFoto() {
+  const galleryInput = g('fotoGallery').value.trim();
+  const gallery = galleryInput ? galleryInput.split(',').map(s => s.trim()).filter(s => s) : [];
+  
+  const o = {
+    e: g('fotoE').value || '🏞️',
+    j: g('fotoJ').value,
+    d: g('fotoD').value,
+    img: g('fotoImg').value || '',
+    vid: g('fotoVid').value || '',
+    gallery: gallery
+  };
+  
+  if (!o.j) {
+    alert('Judul tidak boleh kosong');
+    return;
+  }
+  
+  const idx = parseInt(g('fotoIdx').value);
+  if (idx === -1) D.foto.push(o);
+  else D.foto[idx] = o;
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderFoto();
+    renderFotoList();
+    g('fotoForm').classList.remove('active');
+    showToast('✅ Foto berhasil disimpan ke GitHub');
+  }
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateCartCount();
-            renderGallery();
-        });
+async function delFoto(i) {
+  if (!confirm('Hapus foto ini?')) return;
+  D.foto.splice(i, 1);
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderFoto();
+    renderFotoList();
+    showToast('🗑️ Foto berhasil dihapus dari GitHub');
+  }
+}
 
-        window.onclick = function(event) {
-            if (event.target === cartModal) {
-                closeCart();
-            }
-        }
-    </script>
+function cancelFoto() {
+  g('fotoForm').classList.remove('active');
+}
 
+/* LAPORAN */
+function addL() {
+  g('lIdx').value = -1;
+  g('lE').value = '📄';
+  g('lJ').value = '';
+  g('lD').value = '';
+  g('lT').value = '';
+  g('lB').value = 'Lihat Foto';
+  g('lU').value = '';
+  g('lImg').value = '';
+  g('lVid').value = '';
+  g('lGallery').value = '';
+  g('lLbl').textContent = 'Tambah Laporan';
+  g('lForm').classList.add('active');
+  scrollToForm('lForm');
+}
+
+function editL(i) {
+  const l = D.l[i];
+  g('lIdx').value = i;
+  g('lE').value = l.e;
+  g('lJ').value = l.j;
+  g('lD').value = l.d;
+  g('lT').value = l.t;
+  g('lB').value = l.b;
+  g('lU').value = l.u || '';
+  g('lImg').value = l.img || '';
+  g('lVid').value = l.vid || '';
+  g('lGallery').value = (l.gallery || []).join(',');
+  g('lLbl').textContent = 'Edit Laporan';
+  g('lForm').classList.add('active');
+  scrollToForm('lForm');
+}
+
+async function saveL() {
+  const galleryInput = g('lGallery').value.trim();
+  const gallery = galleryInput ? galleryInput.split(',').map(s => s.trim()).filter(s => s) : [];
+  
+  const o = {
+    e: g('lE').value || '📄',
+    j: g('lJ').value,
+    d: g('lD').value,
+    t: g('lT').value,
+    b: g('lB').value,
+    u: g('lU').value || '',
+    img: g('lImg').value || '',
+    vid: g('lVid').value || '',
+    gallery: gallery
+  };
+  
+  if (!o.j) {
+    alert('Judul tidak boleh kosong');
+    return;
+  }
+  
+  const idx = parseInt(g('lIdx').value);
+  if (idx === -1) D.l.push(o);
+  else D.l[idx] = o;
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderLaporan();
+    renderLList();
+    g('lForm').classList.remove('active');
+    showToast('✅ Laporan berhasil disimpan ke GitHub');
+  }
+}
+
+async function delL(i) {
+  if (!confirm('Hapus laporan ini?')) return;
+  D.l.splice(i, 1);
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderLaporan();
+    renderLList();
+    showToast('🗑️ Laporan berhasil dihapus dari GitHub');
+  }
+}
+
+function cancelL() {
+  g('lForm').classList.remove('active');
+}
+
+/* KEGIATAN */
+function addK() {
+  g('kIdx').value = -1;
+  g('kE').value = '🎉';
+  g('kJ').value = '';
+  g('kT').value = '';
+  g('kImg').value = '';
+  g('kVid').value = '';
+  g('kGallery').value = '';
+  g('kLbl').textContent = 'Tambah Kegiatan';
+  g('kForm').classList.add('active');
+  scrollToForm('kForm');
+}
+
+function editK(i) {
+  const k = D.k[i];
+  g('kIdx').value = i;
+  g('kE').value = k.e;
+  g('kJ').value = k.j;
+  g('kT').value = k.t;
+  g('kImg').value = k.img || '';
+  g('kVid').value = k.vid || '';
+  g('kGallery').value = (k.gallery || []).join(',');
+  g('kLbl').textContent = 'Edit Kegiatan';
+  g('kForm').classList.add('active');
+  scrollToForm('kForm');
+}
+
+async function saveK() {
+  const galleryInput = g('kGallery').value.trim();
+  const gallery = galleryInput ? galleryInput.split(',').map(s => s.trim()).filter(s => s) : [];
+  
+  const o = {
+    e: g('kE').value || '🎉',
+    j: g('kJ').value,
+    t: g('kT').value,
+    img: g('kImg').value || '',
+    vid: g('kVid').value || '',
+    gallery: gallery
+  };
+  
+  if (!o.j) {
+    alert('Judul tidak boleh kosong');
+    return;
+  }
+  
+  const idx = parseInt(g('kIdx').value);
+  if (idx === -1) D.k.unshift(o);
+  else D.k[idx] = o;
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderKegiatan();
+    renderKList();
+    g('kForm').classList.remove('active');
+    showToast('✅ Kegiatan berhasil disimpan ke GitHub');
+  }
+}
+
+async function delK(i) {
+  if (!confirm('Hapus kegiatan ini?')) return;
+  D.k.splice(i, 1);
+  
+  const saved = await saveToGitHub();
+  if (saved) {
+    renderKegiatan();
+    renderKList();
+    showToast('🗑️ Kegiatan berhasil dihapus dari GitHub');
+  }
+}
+
+function cancelK() {
+  g('kForm').classList.remove('active');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PIN & ADMIN
+   ═══════════════════════════════════════════════════════════════ */
+
+const PIN = '1234';
+let pinBuf = '';
+
+function openPIN() {
+  pinBuf = '';
+  updDots();
+  g('pinErr').textContent = '';
+  g('pinModal').classList.add('active');
+}
+
+function closePIN() {
+  g('pinModal').classList.remove('active');
+  pinBuf = '';
+}
+
+function pk(v) {
+  if (v === 'back') {
+    pinBuf = pinBuf.slice(0, -1);
+    updDots();
+    return;
+  }
+  if (v === 'clr') {
+    pinBuf = '';
+    updDots();
+    return;
+  }
+  if (pinBuf.length >= 4) return;
+  pinBuf += v;
+  updDots();
+  if (pinBuf.length === 4) setTimeout(checkPIN, 160);
+}
+
+function updDots() {
+  for (let i = 0; i < 4; i++) g('pd' + i).classList.toggle('filled', i < pinBuf.length);
+}
+
+function checkPIN() {
+  if (pinBuf === PIN) {
+    closePIN();
+    openAdmin();
+  } else {
+    g('pinErr').textContent = '❌ PIN salah, coba lagi';
+    const b = document.querySelector('.pin-box');
+    b.style.transition = 'none';
+    b.style.transform = 'translateX(-8px)';
+    setTimeout(() => {
+      b.style.transition = 'transform .1s';
+      b.style.transform = 'translateX(8px)';
+    }, 80);
+    setTimeout(() => {
+      b.style.transform = 'translateX(0)';
+      pinBuf = '';
+      updDots();
+    }, 180);
+  }
+}
+
+/* ADMIN PANEL */
+function openAdmin() {
+  const s = D.s;
+  ['p', 'kk', 'ds', 'thn', 'd1', 'd1s', 'd2', 'd2s', 'd3', 'd3s', 'd4', 'd4s', 'd5', 'd5s', 'd6', 'd6s', 'tk1', 'tk2', 'tk3', 'tk4', 'tk5', 'tk6'].forEach(k => {
+    const e = g('f_' + k);
+    if (e) e.value = s[k] || '';
+  });
+  renderFotoList();
+  renderLList();
+  renderKList();
+  g('adminPanel').classList.add('open');
+  g('adminBadge').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAdmin() {
+  g('adminPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function adminLogout() {
+  closeAdmin();
+  g('adminBadge').classList.remove('visible');
+  showToast('👋 Keluar dari mode admin');
+}
+
+function swTab(name, btn) {
+  document.querySelectorAll('.ap-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.ap-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  g('tab-' + name).classList.add('active');
+  document.querySelector('.ap-body').scrollTop = 0;
+}
+
+/* HIDDEN TRIGGER */
+let tc = 0, tt = null;
+function triggerHit() {
+  tc++;
+  clearTimeout(tt);
+  tt = setTimeout(() => tc = 0, 2500);
+  if (tc >= 5) {
+    tc = 0;
+    openPIN();
+  }
+}
+g('adminTrigger').addEventListener('click', triggerHit);
+g('adminTrigger').addEventListener('touchstart', function (e) {
+  e.preventDefault();
+  triggerHit();
+}, { passive: false });
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHTBOX
+   ═══════════════════════════════════════════════════════════════ */
+
+function openFotoLB(e, ti, d) {
+  g('lbContent').innerHTML = `<div class="lightbox-emoji-big"><span>${e}</span></div>`;
+  g('lbCaption').innerHTML = `<strong>${ti}</strong><br>${d}`;
+  g('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function openPhotoLB(idx) {
+  const f = D.foto[idx];
+  const imgUrl = GITHUB_BASE + f.img;
+  g('lbContent').innerHTML = `<img src="${imgUrl}" alt="${esc(f.j)}"/>`;
+  g('lbCaption').innerHTML = `<strong>${esc(f.j)}</strong><br>${esc(f.d)}`;
+  g('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function openKegiatanLB(idx) {
+  const k = D.k[idx];
+  if (k.img) {
+    const imgUrl = GITHUB_BASE + k.img;
+    g('lbContent').innerHTML = `<img src="${imgUrl}" alt="${esc(k.j)}"/>`;
+  } else {
+    g('lbContent').innerHTML = `<div class="lightbox-emoji-big"><span>${k.e}</span></div>`;
+  }
+  g('lbCaption').innerHTML = `<strong>${esc(k.j)}</strong><br>${esc(k.t)}`;
+  g('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLB(ev) {
+  if (!ev || ev.target === g('lightbox') || (ev.currentTarget && ev.currentTarget.classList.contains('lightbox-close'))) {
+    g('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+/* BACK TO TOP */
+const btt = g('backToTop');
+window.addEventListener('scroll', () => btt.classList.toggle('show', scrollY > 320));
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ESC KEY */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeLB({ target: g('lightbox') });
+    closePIN();
+    closeAdmin();
+    closeGallery();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT - Load from GitHub first
+   ═══════════════════════════════════════════════════════════════ */
+
+async function init() {
+  await loadFromGitHub();
+  renderAll();
+}
+
+init();
+</script>
 </body>
 </html>
